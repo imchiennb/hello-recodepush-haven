@@ -7,18 +7,44 @@ import Testimonials from "@/components/Testimonials";
 import FAQ from "@/components/FAQ";
 import CTA from "@/components/CTA";
 import Footer from "@/components/Footer";
+import { useEffect } from "react";
 
 const Index = () => {
+  // Add smooth scrolling effect when clicking on navigation links
+  useEffect(() => {
+    const handleAnchorClick = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      if (target.tagName === 'A' && target.getAttribute('href')?.startsWith('#')) {
+        e.preventDefault();
+        const href = target.getAttribute('href');
+        if (href) {
+          const element = document.querySelector(href);
+          if (element) {
+            window.scrollTo({
+              top: element.getBoundingClientRect().top + window.scrollY - 100,
+              behavior: 'smooth'
+            });
+          }
+        }
+      }
+    };
+
+    document.addEventListener('click', handleAnchorClick);
+    return () => document.removeEventListener('click', handleAnchorClick);
+  }, []);
+
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-gradient-to-b from-neutral-50 to-white">
       <Navbar />
       <main>
         <Hero />
-        <Features />
-        <Pricing />
-        <Testimonials />
-        <FAQ />
-        <CTA />
+        <div className="relative z-10 -mt-10 rounded-t-3xl bg-white">
+          <Features />
+          <Pricing />
+          <Testimonials />
+          <FAQ />
+          <CTA />
+        </div>
       </main>
       <Footer />
     </div>
