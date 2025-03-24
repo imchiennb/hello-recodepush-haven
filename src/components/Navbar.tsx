@@ -61,14 +61,27 @@ const Navbar = () => {
           >
             FAQ
           </a>
+          <a
+            href="#contact"
+            className="text-neutral-700 hover:text-brand-600 transition-colors font-medium"
+          >
+            Contact
+          </a>
         </nav>
 
         {/* CTA Buttons */}
         <div className="hidden md:flex items-center space-x-4">
-          <Button variant="outline" className="transition-all hover:bg-brand-50">
+          <Button 
+            variant="outline" 
+            className="transition-all hover:bg-brand-50 hover:border-brand-300"
+            onClick={() => window.location.href = '#contact'}
+          >
             Sign In
           </Button>
-          <Button className="bg-brand-600 hover:bg-brand-700 text-white">
+          <Button 
+            className="bg-brand-600 hover:bg-brand-700 text-white transition-all hover:shadow-lg"
+            onClick={() => window.location.href = '#pricing'}
+          >
             Get Started
           </Button>
         </div>
@@ -114,11 +127,31 @@ const Navbar = () => {
             >
               FAQ
             </a>
+            <a
+              href="#contact"
+              className="text-neutral-700 hover:text-brand-600 transition-colors font-medium p-2"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Contact
+            </a>
             <div className="flex flex-col space-y-2 pt-2">
-              <Button variant="outline" className="w-full justify-center">
+              <Button 
+                variant="outline" 
+                className="w-full justify-center"
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  window.location.href = '#contact';
+                }}
+              >
                 Sign In
               </Button>
-              <Button className="w-full justify-center bg-brand-600 hover:bg-brand-700">
+              <Button 
+                className="w-full justify-center bg-brand-600 hover:bg-brand-700"
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  window.location.href = '#pricing';
+                }}
+              >
                 Get Started
               </Button>
             </div>

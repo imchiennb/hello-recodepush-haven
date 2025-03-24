@@ -1,8 +1,12 @@
 
 import { Button } from '@/components/ui/button';
 import { ArrowRight, Star } from 'lucide-react';
+import { useState } from 'react';
 
 const CTA = () => {
+  const [isHoveredTrial, setIsHoveredTrial] = useState(false);
+  const [isHoveredDemo, setIsHoveredDemo] = useState(false);
+  
   return (
     <section className="py-24 bg-gradient-to-r from-brand-600 to-brand-800 text-white relative overflow-hidden">
       <div className="container relative z-10">
@@ -23,11 +27,22 @@ const CTA = () => {
           </p>
           
           <div className="flex flex-col sm:flex-row items-center justify-center gap-5">
-            <Button className="bg-white text-brand-700 hover:bg-neutral-100 text-lg px-8 py-6 h-auto shadow-xl hover:shadow-2xl transition-all group">
+            <Button 
+              className={`bg-white text-brand-700 hover:bg-neutral-100 text-lg px-8 py-6 h-auto transition-all duration-300 ${isHoveredTrial ? 'shadow-2xl translate-y-[-2px]' : 'shadow-xl'} group`}
+              onMouseEnter={() => setIsHoveredTrial(true)}
+              onMouseLeave={() => setIsHoveredTrial(false)}
+              onClick={() => window.location.href = '#pricing'}
+            >
               Start 14-Day Free Trial
-              <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
+              <ArrowRight className={`ml-2 h-5 w-5 transition-transform duration-300 ${isHoveredTrial ? 'translate-x-1' : ''}`} />
             </Button>
-            <Button variant="outline" className="border-white border-2 text-white hover:bg-white/10 text-lg px-8 py-6 h-auto">
+            <Button 
+              variant="outline" 
+              className={`border-white border-2 text-white hover:bg-white/10 text-lg px-8 py-6 h-auto transition-all duration-300 ${isHoveredDemo ? 'bg-white/5' : ''}`}
+              onMouseEnter={() => setIsHoveredDemo(true)}
+              onMouseLeave={() => setIsHoveredDemo(false)}
+              onClick={() => window.location.href = '#contact'}
+            >
               Schedule a Demo
             </Button>
           </div>

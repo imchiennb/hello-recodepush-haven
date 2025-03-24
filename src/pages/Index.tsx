@@ -6,6 +6,7 @@ import Pricing from "@/components/Pricing";
 import Testimonials from "@/components/Testimonials";
 import FAQ from "@/components/FAQ";
 import CTA from "@/components/CTA";
+import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
 import { useEffect } from "react";
 
@@ -21,7 +22,7 @@ const Index = () => {
           const element = document.querySelector(href);
           if (element) {
             window.scrollTo({
-              top: element.getBoundingClientRect().top + window.scrollY - 100,
+              top: element.getBoundingClientRect().top + window.scrollY - 80,
               behavior: 'smooth'
             });
           }
@@ -44,6 +45,7 @@ const Index = () => {
           <Testimonials />
           <FAQ />
           <CTA />
+          <Contact />
         </div>
       </main>
       <Footer />

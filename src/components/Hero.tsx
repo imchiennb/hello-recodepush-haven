@@ -1,16 +1,33 @@
 
 import { ArrowRight, CheckCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useEffect, useState } from 'react';
 
 const Hero = () => {
+  const [isHovered, setIsHovered] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+
   const highlightFeatures = [
     "Intelligent code reviews",
     "Team collaboration tools",
     "Lightning fast deployments"
   ];
 
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 0) {
+        setIsScrolled(true);
+      } else {
+        setIsScrolled(false);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   return (
-    <section className="relative pt-28 pb-20 md:pt-40 md:pb-32 overflow-hidden bg-gradient-hero">
+    <section className="relative min-h-screen flex items-center pt-16 overflow-hidden bg-gradient-hero">
       <div className="container relative z-10">
         <div className="max-w-4xl mx-auto text-center">
           <span className="inline-block px-4 py-1.5 mb-5 rounded-full bg-brand-100 text-brand-700 text-sm font-medium animate-fade-down shadow-sm">
@@ -36,18 +53,34 @@ const Hero = () => {
           </div>
           
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 animate-fade-up" style={{ animationDelay: '200ms' }}>
-            <Button className="bg-brand-600 hover:bg-brand-700 text-white px-8 py-6 text-lg h-auto shadow-lg hover:shadow-xl transition-all">
+            <Button 
+              className={`bg-brand-600 hover:bg-brand-700 text-white px-8 py-6 text-lg h-auto shadow-lg transition-all duration-300 ${isHovered ? 'shadow-xl translate-y-[-2px]' : ''}`}
+              onMouseEnter={() => setIsHovered(true)}
+              onMouseLeave={() => setIsHovered(false)}
+              onClick={() => window.location.href = '#pricing'}
+            >
               Start Free Trial
             </Button>
-            <Button variant="outline" className="group px-8 py-6 text-lg h-auto border-2 hover:bg-brand-50">
+            <Button 
+              variant="outline" 
+              className="group px-8 py-6 text-lg h-auto border-2 hover:bg-brand-50 transition-all duration-300 hover:border-brand-300"
+              onClick={() => window.location.href = '#features'}
+            >
               <span>See How It Works</span>
-              <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
+              <ArrowRight className="ml-2 h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" />
             </Button>
           </div>
         </div>
       </div>
 
       {/* Decorative elements */}
+      {!isScrolled && (
+        <div className="absolute bottom-8 left-0 right-0 flex justify-center animate-bounce">
+          <a href="#features" className="text-neutral-500 hover:text-brand-600 transition-colors">
+            <ArrowRight className="h-6 w-6 transform rotate-90" />
+          </a>
+        </div>
+      )}
       <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-background to-transparent"></div>
       <div className="absolute top-1/3 left-10 w-80 h-80 bg-brand-200 rounded-full mix-blend-multiply filter blur-3xl opacity-40 animate-pulse-soft"></div>
       <div className="absolute top-1/4 right-10 w-96 h-96 bg-blue-200 rounded-full mix-blend-multiply filter blur-3xl opacity-40 animate-pulse-soft" style={{ animationDelay: '1s' }}></div>
