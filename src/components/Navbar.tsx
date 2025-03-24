@@ -70,7 +70,7 @@ const Navbar = () => {
         </nav>
 
         {/* CTA Buttons */}
-        <div className="hidden md:flex items-center space-x-4">
+        {/* <div className="hidden md:flex items-center space-x-4">
           <Button 
             variant="outline" 
             className="transition-all hover:bg-brand-50 hover:border-brand-300"
@@ -84,7 +84,7 @@ const Navbar = () => {
           >
             Get Started
           </Button>
-        </div>
+        </div> */}
 
         {/* Mobile Menu Button */}
         <button
@@ -134,7 +134,7 @@ const Navbar = () => {
             >
               Contact
             </a>
-            <div className="flex flex-col space-y-2 pt-2">
+            {/* <div className="flex flex-col space-y-2 pt-2">
               <Button 
                 variant="outline" 
                 className="w-full justify-center"
@@ -154,7 +154,7 @@ const Navbar = () => {
               >
                 Get Started
               </Button>
-            </div>
+            </div> */}
           </nav>
         </div>
       )}

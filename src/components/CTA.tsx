@@ -38,7 +38,7 @@ const CTA = () => {
             </Button>
             <Button 
               variant="outline" 
-              className={`border-white border-2 text-white hover:bg-white/10 text-lg px-8 py-6 h-auto transition-all duration-300 ${isHoveredDemo ? 'bg-white/5' : ''}`}
+              className={`border-white border-2 text-primary hover:bg-white/10 text-lg px-8 py-6 h-auto transition-all duration-300 ${isHoveredDemo ? 'bg-white/5 text-white' : ''}`}
               onMouseEnter={() => setIsHoveredDemo(true)}
               onMouseLeave={() => setIsHoveredDemo(false)}
               onClick={() => window.location.href = '#contact'}

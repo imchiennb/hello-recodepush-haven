@@ -1,0 +1,12 @@
+services:
+  recodepush-web:
+    image: recodepush-web
+    container_name: recodepush-web
+    build:
+      context: .
+      dockerfile: dockerfile
+      args:
+        - PORT=${PORT}
+    ports:
+      - '${PORT:-4002}:80'
+    restart: always
