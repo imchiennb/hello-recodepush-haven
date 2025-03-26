@@ -7,7 +7,6 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -15,16 +14,10 @@ import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-type AuthModalProps = {
-  open?: boolean;
-  onOpenChange?: (open: boolean) => void;
-  defaultTab?: "login" | "signup";
-};
-
-// Exported for other components to use
-export const AuthModal = ({ open, onOpenChange, defaultTab = "login" }: AuthModalProps) => {
-  const [isOpen, setIsOpen] = useState(open || false);
-  const [activeTab, setActiveTab] = useState<"login" | "signup">(defaultTab);
+// Component for external usage
+const AuthModal = () => {
+  const { isAuthModalOpen, closeAuthModal, login, signup, isLoading } = useAuth();
+  const [activeTab, setActiveTab] = useState<"login" | "signup">("login");
   
   // Login form state
   const [loginEmail, setLoginEmail] = useState("");
@@ -34,28 +27,13 @@ export const AuthModal = ({ open, onOpenChange, defaultTab = "login" }: AuthModa
   const [signupName, setSignupName] = useState("");
   const [signupEmail, setSignupEmail] = useState("");
   const [signupPassword, setSignupPassword] = useState("");
-  
-  const { login, signup, isLoading } = useAuth();
-
-  useEffect(() => {
-    if (open !== undefined) {
-      setIsOpen(open);
-    }
-  }, [open]);
-
-  const handleOpenChange = (newOpen: boolean) => {
-    setIsOpen(newOpen);
-    if (onOpenChange) {
-      onOpenChange(newOpen);
-    }
-  };
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
       await login(loginEmail, loginPassword);
       toast.success("Logged in successfully");
-      handleOpenChange(false);
+      closeAuthModal();
     } catch (error) {
       toast.error("Failed to login");
     }
@@ -66,14 +44,14 @@ export const AuthModal = ({ open, onOpenChange, defaultTab = "login" }: AuthModa
     try {
       await signup(signupName, signupEmail, signupPassword);
       toast.success("Account created successfully");
-      handleOpenChange(false);
+      closeAuthModal();
     } catch (error) {
       toast.error("Failed to create account");
     }
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={handleOpenChange}>
+    <Dialog open={isAuthModalOpen} onOpenChange={closeAuthModal}>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>Authentication</DialogTitle>
@@ -158,9 +136,4 @@ export const AuthModal = ({ open, onOpenChange, defaultTab = "login" }: AuthModa
   );
 };
 
-// Standalone component that renders nothing but is used to control the modal state globally
-const AuthModalController = () => {
-  return null;
-};
-
-export default AuthModalController;
+export default AuthModal;

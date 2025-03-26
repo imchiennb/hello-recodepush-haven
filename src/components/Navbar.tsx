@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Menu, X } from 'lucide-react';
@@ -11,7 +10,7 @@ import Logo from './Logo';
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const { user } = useAuth();
+  const { user, logout, openAuthModal } = useAuth();
   const location = useLocation();
   const { t, i18n } = useTranslation();
   
@@ -27,21 +26,15 @@ const Navbar = () => {
 
   // Handle authentication actions
   const handleLoginClick = () => {
-    // For demonstration purposes, we'll just show a console message
-    console.log('Login clicked');
-    // Implement your actual login logic here
+    openAuthModal('login');
   };
 
   const handleSignupClick = () => {
-    // For demonstration purposes, we'll just show a console message
-    console.log('Signup clicked');
-    // Implement your actual signup logic here
+    openAuthModal('signup');
   };
 
   const handleLogoutClick = () => {
-    // For demonstration purposes, we'll just show a console message
-    console.log('Logout clicked');
-    // Implement your actual logout logic here
+    logout();
   };
   
   // Get current language for path prefixing
