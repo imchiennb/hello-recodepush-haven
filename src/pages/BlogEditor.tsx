@@ -16,26 +16,8 @@ import { toast } from "sonner";
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { BlogPost } from '@/components/Blogs';
-
-// Rich text editor component
-const RichTextEditor = ({ value, onChange }: { value: string, onChange: (value: string) => void }) => {
-  return (
-    <div className="border rounded-md">
-      <div className="flex items-center gap-1 px-3 py-2 border-b bg-neutral-50">
-        <Button variant="ghost" size="sm" className="h-8 w-8 p-0" title="Insert Image">
-          <Image className="h-4 w-4" />
-        </Button>
-        {/* More toolbar buttons would go here */}
-      </div>
-      <Textarea 
-        className="min-h-[400px] border-none rounded-none focus-visible:ring-0 resize-none"
-        placeholder="Write your blog post content here..."
-        value={value}
-        onChange={e => onChange(e.target.value)}
-      />
-    </div>
-  );
-};
+import RichTextEditor from '@/components/RichTextEditor';
+import { useAuth } from '@/contexts/AuthContext';
 
 // Sample mock data
 const mockBlogPosts = [
@@ -65,6 +47,7 @@ const BlogEditor = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const isEditing = id !== undefined;
+  const { user } = useAuth();
   
   const [post, setPost] = useState<ExtendedBlogPost>({
     id: 0,
@@ -72,7 +55,7 @@ const BlogEditor = () => {
     excerpt: '',
     content: '',
     publishedDate: new Date().toISOString().split('T')[0],
-    author: '',
+    author: user?.name || '',
     readTime: '',
     category: '',
     thumbnail: '',
@@ -93,8 +76,14 @@ const BlogEditor = () => {
         }
         setLoading(false);
       }, 500);
+    } else if (user) {
+      // Set the author to the logged-in user for new posts
+      setPost(prev => ({
+        ...prev,
+        author: user.name
+      }));
     }
-  }, [id, isEditing]);
+  }, [id, isEditing, user]);
   
   const handleInputChange = (field: keyof ExtendedBlogPost, value: string) => {
     setPost(prev => ({ ...prev, [field]: value }));
@@ -282,7 +271,7 @@ const BlogEditor = () => {
                   )}
                 </div>
                 
-                {/* Content */}
+                {/* Content with WYSIWYG editor */}
                 <div>
                   <Label htmlFor="content">Content</Label>
                   <RichTextEditor 

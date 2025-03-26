@@ -55,7 +55,8 @@ const Blogs = () => {
   
   useEffect(() => {
     // In a real app, this would be an API call
-    setBlogPosts(mockBlogPosts);
+    // Only get the 3 most recent posts
+    setBlogPosts(mockBlogPosts.slice(0, 3));
   }, []);
 
   return (
@@ -116,8 +117,9 @@ const Blogs = () => {
         
         <div className="text-center mt-12">
           <Link to="/blog">
-            <Button className="bg-brand-600 hover:bg-brand-700 text-white transition-all">
+            <Button className="bg-brand-600 hover:bg-brand-700 text-white transition-all group">
               View All Articles
+              <ArrowRight size={16} className="ml-2 group-hover:translate-x-1 transition-transform" />
             </Button>
           </Link>
         </div>
