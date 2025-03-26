@@ -6,13 +6,14 @@ import { Link, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/contexts/AuthContext';
 import LanguageSelector from './LanguageSelector';
+import Logo from './Logo';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const { user } = useAuth();
   const location = useLocation();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   
   // Update the scroll state on window scroll
   useEffect(() => {
@@ -43,6 +44,18 @@ const Navbar = () => {
     // Implement your actual logout logic here
   };
   
+  // Get current language for path prefixing
+  const getLanguagePrefix = () => {
+    const langCode = i18n.language.split('-')[0];
+    return Object.keys(i18n.options.resources || {}).includes(langCode) ? `/${langCode}` : '';
+  };
+  
+  // Helper to create language-aware paths
+  const createPath = (path: string) => {
+    if (path.startsWith('#')) return path;
+    return `${getLanguagePrefix()}${path}`;
+  };
+  
   return (
     <header
       className={`fixed top-0 left-0 right-0 bg-white z-50 transition-shadow duration-300 ${
@@ -52,17 +65,14 @@ const Navbar = () => {
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center py-4">
           {/* Logo */}
-          <Link to="/" className="flex items-center">
-            <img src="/logo.png" alt="RecodePush Logo" className="h-8 md:h-10 mr-2" />
-            <span className="font-bold text-xl md:text-2xl hidden sm:inline-block">RecodePush</span>
-          </Link>
+          <Logo />
           
           {/* Desktop Menu */}
           <nav className="hidden md:flex items-center space-x-6">
-            <Link to="/" className={`text-neutral-700 hover:text-brand-600 transition-colors ${location.pathname === '/' ? 'font-medium text-brand-600' : ''}`}>
+            <Link to={createPath('/')} className={`text-neutral-700 hover:text-brand-600 transition-colors ${location.pathname === '/' || location.pathname === `/${i18n.language}` ? 'font-medium text-brand-600' : ''}`}>
               {t('nav.home')}
             </Link>
-            <Link to="/blog" className={`text-neutral-700 hover:text-brand-600 transition-colors ${location.pathname.includes('/blog') && !location.pathname.includes('/blog/manage') ? 'font-medium text-brand-600' : ''}`}>
+            <Link to={createPath('/blog')} className={`text-neutral-700 hover:text-brand-600 transition-colors ${location.pathname.includes('/blog') && !location.pathname.includes('/blog/manage') ? 'font-medium text-brand-600' : ''}`}>
               {t('nav.blog')}
             </Link>
             <Link to="#features" className="text-neutral-700 hover:text-brand-600 transition-colors">
@@ -75,7 +85,7 @@ const Navbar = () => {
               {t('nav.contact')}
             </Link>
             {user && (
-              <Link to="/blog/manage" className={`text-neutral-700 hover:text-brand-600 transition-colors ${location.pathname.includes('/blog/manage') ? 'font-medium text-brand-600' : ''}`}>
+              <Link to={createPath('/blog/manage')} className={`text-neutral-700 hover:text-brand-600 transition-colors ${location.pathname.includes('/blog/manage') ? 'font-medium text-brand-600' : ''}`}>
                 {t('nav.manageBlog')}
               </Link>
             )}
@@ -134,14 +144,14 @@ const Navbar = () => {
           <div className="md:hidden py-4 border-t">
             <nav className="flex flex-col space-y-4 mb-4">
               <Link 
-                to="/" 
-                className={`px-4 py-2 rounded-md hover:bg-neutral-100 ${location.pathname === '/' ? 'bg-neutral-100 font-medium' : ''}`}
+                to={createPath('/')} 
+                className={`px-4 py-2 rounded-md hover:bg-neutral-100 ${location.pathname === '/' || location.pathname === `/${i18n.language}` ? 'bg-neutral-100 font-medium' : ''}`}
                 onClick={() => setIsOpen(false)}
               >
                 {t('nav.home')}
               </Link>
               <Link 
-                to="/blog" 
+                to={createPath('/blog')} 
                 className={`px-4 py-2 rounded-md hover:bg-neutral-100 ${location.pathname.includes('/blog') && !location.pathname.includes('/blog/manage') ? 'bg-neutral-100 font-medium' : ''}`}
                 onClick={() => setIsOpen(false)}
               >
@@ -170,7 +180,7 @@ const Navbar = () => {
               </Link>
               {user && (
                 <Link 
-                  to="/blog/manage" 
+                  to={createPath('/blog/manage')} 
                   className={`px-4 py-2 rounded-md hover:bg-neutral-100 ${location.pathname.includes('/blog/manage') ? 'bg-neutral-100 font-medium' : ''}`}
                   onClick={() => setIsOpen(false)}
                 >

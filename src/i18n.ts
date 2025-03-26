@@ -44,7 +44,18 @@ i18n
     detection: {
       order: ['path', 'navigator', 'htmlTag'],
       lookupFromPathIndex: 0,
+      caches: ['localStorage'],
     },
   });
+
+// Function to get and format current language
+export const getCurrentLanguageCode = () => {
+  return i18n.language.split('-')[0]; // Handle cases like 'en-US' -> 'en'
+};
+
+// Function to get language name from code
+export const getLanguageName = (code: string) => {
+  return supportedLanguages[code as keyof typeof supportedLanguages] || 'Unknown';
+};
 
 export default i18n;

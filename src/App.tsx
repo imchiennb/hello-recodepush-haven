@@ -14,7 +14,7 @@ import NotFound from "./pages/NotFound";
 import AuthModal from "./components/AuthModal";
 import BlogList from "./pages/BlogList";
 import { useEffect } from "react";
-import i18n from "./i18n";
+import i18n, { supportedLanguages } from "./i18n";
 
 // Protected route component
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
@@ -36,12 +36,12 @@ const LanguageRoute = ({ children }: { children: React.ReactNode }) => {
   
   useEffect(() => {
     // Check if the first path segment is a valid language code
-    if (langCode && Object.keys(i18n.options.resources || {}).includes(langCode)) {
+    if (langCode && Object.keys(supportedLanguages).includes(langCode)) {
       i18n.changeLanguage(langCode);
     } else {
       // If no valid language code in URL, use browser language or default
       const detectedLng = navigator.language.split('-')[0];
-      const validLng = Object.keys(i18n.options.resources || {}).includes(detectedLng) 
+      const validLng = Object.keys(supportedLanguages).includes(detectedLng) 
         ? detectedLng 
         : i18n.options.fallbackLng as string;
       i18n.changeLanguage(validLng);

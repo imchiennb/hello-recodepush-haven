@@ -10,31 +10,33 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import { supportedLanguages } from '@/i18n';
+import { supportedLanguages, getCurrentLanguageCode } from '@/i18n';
 
 const LanguageSelector = () => {
   const { i18n, t } = useTranslation();
   const navigate = useNavigate();
   const location = useLocation();
+  const currentLanguageCode = getCurrentLanguageCode();
 
   const changeLanguage = (lng: string) => {
-    i18n.changeLanguage(lng);
-    
-    // Update URL to include language
-    const pathSegments = location.pathname.split('/').filter(Boolean);
-    const isLanguagePrefix = Object.keys(supportedLanguages).includes(pathSegments[0]);
-    
-    let newPath = '';
-    if (isLanguagePrefix) {
-      // Replace current language prefix
-      pathSegments[0] = lng;
-      newPath = '/' + pathSegments.join('/');
-    } else {
-      // Add language prefix to the path
-      newPath = `/${lng}${location.pathname}`;
-    }
-    
-    navigate(newPath + location.search);
+    // First change the i18n instance language
+    i18n.changeLanguage(lng).then(() => {
+      // Then update URL to include language
+      const pathSegments = location.pathname.split('/').filter(Boolean);
+      const isLanguagePrefix = Object.keys(supportedLanguages).includes(pathSegments[0]);
+      
+      let newPath = '';
+      if (isLanguagePrefix) {
+        // Replace current language prefix
+        pathSegments[0] = lng;
+        newPath = '/' + pathSegments.join('/');
+      } else {
+        // Add language prefix to the path
+        newPath = `/${lng}${location.pathname}`;
+      }
+      
+      navigate(newPath + location.search);
+    });
   };
 
   return (
@@ -50,7 +52,7 @@ const LanguageSelector = () => {
           <DropdownMenuItem
             key={code}
             onClick={() => changeLanguage(code)}
-            className={i18n.language === code ? "bg-accent" : ""}
+            className={currentLanguageCode === code ? "bg-accent" : ""}
           >
             {t(`language.${name.toLowerCase()}`)}
           </DropdownMenuItem>
