@@ -10,7 +10,7 @@ import LanguageSelector from './LanguageSelector';
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const { user, openAuthModal } = useAuth();
+  const { user } = useAuth();
   const location = useLocation();
   const { t } = useTranslation();
   
@@ -23,6 +23,25 @@ const Navbar = () => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  // Handle authentication actions
+  const handleLoginClick = () => {
+    // For demonstration purposes, we'll just show a console message
+    console.log('Login clicked');
+    // Implement your actual login logic here
+  };
+
+  const handleSignupClick = () => {
+    // For demonstration purposes, we'll just show a console message
+    console.log('Signup clicked');
+    // Implement your actual signup logic here
+  };
+
+  const handleLogoutClick = () => {
+    // For demonstration purposes, we'll just show a console message
+    console.log('Logout clicked');
+    // Implement your actual logout logic here
+  };
   
   return (
     <header
@@ -74,9 +93,9 @@ const Navbar = () => {
                 <Button 
                   variant="outline" 
                   size="sm"
-                  onClick={() => openAuthModal('logout')}
+                  onClick={handleLogoutClick}
                 >
-                  Logout
+                  {t('nav.logout')}
                 </Button>
               </div>
             ) : (
@@ -84,13 +103,13 @@ const Navbar = () => {
                 <Button 
                   variant="ghost" 
                   size="sm"
-                  onClick={() => openAuthModal('login')}
+                  onClick={handleLoginClick}
                 >
                   {t('nav.login')}
                 </Button>
                 <Button 
                   size="sm"
-                  onClick={() => openAuthModal('signup')}
+                  onClick={handleSignupClick}
                 >
                   {t('nav.signup')}
                 </Button>
@@ -170,11 +189,11 @@ const Navbar = () => {
                   <Button 
                     variant="outline" 
                     onClick={() => {
-                      openAuthModal('logout');
+                      handleLogoutClick();
                       setIsOpen(false);
                     }}
                   >
-                    Logout
+                    {t('nav.logout')}
                   </Button>
                 </>
               ) : (
@@ -182,7 +201,7 @@ const Navbar = () => {
                   <Button 
                     variant="outline" 
                     onClick={() => {
-                      openAuthModal('login');
+                      handleLoginClick();
                       setIsOpen(false);
                     }}
                   >
@@ -190,7 +209,7 @@ const Navbar = () => {
                   </Button>
                   <Button 
                     onClick={() => {
-                      openAuthModal('signup');
+                      handleSignupClick();
                       setIsOpen(false);
                     }}
                   >

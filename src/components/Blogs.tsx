@@ -136,7 +136,7 @@ const Blogs = () => {
               <div className="h-48 overflow-hidden">
                 <img 
                   src={post.thumbnail} 
-                  alt={typeof post.title === 'string' ? post.title : ''} 
+                  alt={typeof post.title === 'string' ? post.title : String(post.title[currentLanguage] || post.title.en)} 
                   className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
                 />
               </div>
@@ -146,13 +146,13 @@ const Blogs = () => {
                     {post.category}
                   </span>
                   <span className="mx-2">•</span>
-                  <span>{post.readTime}</span>
+                  <span>{typeof post.readTime === 'string' ? post.readTime : String(post.readTime[currentLanguage] || post.readTime.en)}</span>
                 </div>
                 <h3 className="text-xl font-bold mb-2 line-clamp-2">
-                  {post.title}
+                  {typeof post.title === 'string' ? post.title : String(post.title[currentLanguage] || post.title.en)}
                 </h3>
                 <p className="text-neutral-600 mb-4 line-clamp-3">
-                  {post.excerpt}
+                  {typeof post.excerpt === 'string' ? post.excerpt : String(post.excerpt[currentLanguage] || post.excerpt.en)}
                 </p>
                 <div className="flex items-center justify-between mt-4">
                   <div className="flex items-center">

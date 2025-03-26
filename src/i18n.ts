@@ -44,7 +44,6 @@ i18n
     detection: {
       order: ['path', 'navigator', 'htmlTag'],
       lookupFromPathIndex: 0,
-      checkWhitelist: true,
     },
   });
 

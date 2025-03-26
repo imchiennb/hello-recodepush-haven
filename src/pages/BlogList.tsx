@@ -15,6 +15,7 @@ import {
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { BlogPost } from '@/components/Blogs';
+import { useTranslation } from 'react-i18next';
 
 // Extended mock data for blog list
 const mockBlogPosts = [
@@ -86,6 +87,8 @@ const BlogList = () => {
   const [blogPosts, setBlogPosts] = useState<BlogPost[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('All');
+  const { t, i18n } = useTranslation();
+  const currentLanguage = i18n.language || 'en';
   
   useEffect(() => {
     // In a real app, this would be an API call
@@ -93,8 +96,11 @@ const BlogList = () => {
   }, []);
 
   const filteredPosts = blogPosts.filter(post => {
-    const matchesSearch = post.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
-                         post.excerpt.toLowerCase().includes(searchTerm.toLowerCase());
+    const titleStr = typeof post.title === 'string' ? post.title : String(post.title[currentLanguage] || post.title.en);
+    const excerptStr = typeof post.excerpt === 'string' ? post.excerpt : String(post.excerpt[currentLanguage] || post.excerpt.en);
+    
+    const matchesSearch = titleStr.toLowerCase().includes(searchTerm.toLowerCase()) || 
+                         excerptStr.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesCategory = categoryFilter === 'All' || post.category === categoryFilter;
     
     return matchesSearch && matchesCategory;
@@ -107,9 +113,9 @@ const BlogList = () => {
       <main className="pt-32 pb-20">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
-            <h1 className="text-4xl md:text-5xl font-bold mb-4">Our Blog</h1>
+            <h1 className="text-4xl md:text-5xl font-bold mb-4">{t('blog.latestFromBlog')}</h1>
             <p className="text-lg text-neutral-600 max-w-2xl mx-auto">
-              Insights, tutorials, and news about code collaboration and development.
+              {t('blog.stayUpdated')}
             </p>
           </div>
           
@@ -155,7 +161,7 @@ const BlogList = () => {
                   <div className="h-48 overflow-hidden">
                     <img 
                       src={post.thumbnail} 
-                      alt={post.title} 
+                      alt={typeof post.title === 'string' ? post.title : String(post.title[currentLanguage] || post.title.en)} 
                       className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
                     />
                   </div>
@@ -165,13 +171,13 @@ const BlogList = () => {
                         {post.category}
                       </span>
                       <span className="mx-2">•</span>
-                      <span>{post.readTime}</span>
+                      <span>{typeof post.readTime === 'string' ? post.readTime : String(post.readTime[currentLanguage] || post.readTime.en)}</span>
                     </div>
                     <h3 className="text-xl font-bold mb-2 line-clamp-2">
-                      {post.title}
+                      {typeof post.title === 'string' ? post.title : String(post.title[currentLanguage] || post.title.en)}
                     </h3>
                     <p className="text-neutral-600 mb-4 line-clamp-3">
-                      {post.excerpt}
+                      {typeof post.excerpt === 'string' ? post.excerpt : String(post.excerpt[currentLanguage] || post.excerpt.en)}
                     </p>
                     <div className="flex items-center justify-between mt-4">
                       <div className="flex items-center">
@@ -186,7 +192,7 @@ const BlogList = () => {
                   <div className="px-6 pb-6">
                     <Link to={`/blog/${post.id}`}>
                       <Button variant="ghost" className="w-full justify-center group">
-                        Read Article 
+                        {t('blog.readArticle')}
                         <ArrowRight size={16} className="ml-2 group-hover:translate-x-1 transition-transform" />
                       </Button>
                     </Link>
@@ -195,7 +201,7 @@ const BlogList = () => {
               ))
             ) : (
               <div className="col-span-full py-12 text-center text-neutral-500">
-                <p className="text-lg">No articles found matching your search criteria.</p>
+                <p className="text-lg">{t('blog.noBlogsFound')}</p>
                 <Button 
                   variant="outline" 
                   className="mt-4"
