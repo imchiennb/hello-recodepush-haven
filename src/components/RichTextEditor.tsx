@@ -6,9 +6,10 @@ import { useState, useEffect } from 'react';
 interface RichTextEditorProps {
   value: string;
   onChange: (value: string) => void;
+  placeholder?: string;
 }
 
-const RichTextEditor = ({ value, onChange }: RichTextEditorProps) => {
+const RichTextEditor = ({ value, onChange, placeholder }: RichTextEditorProps) => {
   // This state is needed for SSR compatibility
   const [mounted, setMounted] = useState(false);
   
@@ -50,6 +51,7 @@ const RichTextEditor = ({ value, onChange }: RichTextEditorProps) => {
         modules={modules}
         formats={formats}
         className="min-h-[400px]"
+        placeholder={placeholder}
       />
       <style dangerouslySetInnerHTML={{ __html: `
         .rich-text-editor .ql-container {

@@ -13,6 +13,8 @@ import BlogEditor from "./pages/BlogEditor";
 import NotFound from "./pages/NotFound";
 import AuthModal from "./components/AuthModal";
 import BlogList from "./pages/BlogList";
+import { useEffect } from "react";
+import i18n from "./i18n";
 
 // Protected route component
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
@@ -27,6 +29,28 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
 
 const queryClient = new QueryClient();
 
+// Language route wrapper to ensure i18n is initialized
+const LanguageRoute = ({ children }: { children: React.ReactNode }) => {
+  const pathSegments = window.location.pathname.split('/').filter(Boolean);
+  const langCode = pathSegments[0];
+  
+  useEffect(() => {
+    // Check if the first path segment is a valid language code
+    if (langCode && Object.keys(i18n.options.resources || {}).includes(langCode)) {
+      i18n.changeLanguage(langCode);
+    } else {
+      // If no valid language code in URL, use browser language or default
+      const detectedLng = navigator.language.split('-')[0];
+      const validLng = Object.keys(i18n.options.resources || {}).includes(detectedLng) 
+        ? detectedLng 
+        : i18n.options.fallbackLng as string;
+      i18n.changeLanguage(validLng);
+    }
+  }, [langCode]);
+  
+  return <>{children}</>;
+};
+
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <AuthProvider>
@@ -35,37 +59,70 @@ const App = () => (
         <Sonner />
         <AuthModal />
         <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/blog" element={<BlogList />} />
-            <Route path="/blog/:id" element={<BlogPost />} />
-            <Route 
-              path="/blog/manage" 
-              element={
-                <ProtectedRoute>
-                  <BlogManage />
-                </ProtectedRoute>
-              } 
-            />
-            <Route 
-              path="/blog/create" 
-              element={
-                <ProtectedRoute>
-                  <BlogEditor />
-                </ProtectedRoute>
-              } 
-            />
-            <Route 
-              path="/blog/edit/:id" 
-              element={
-                <ProtectedRoute>
-                  <BlogEditor />
-                </ProtectedRoute>
-              } 
-            />
-            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-            <Route path="*" element={<NotFound />} />
-          </Routes>
+          <LanguageRoute>
+            <Routes>
+              {/* Language-specific routes */}
+              <Route path="/:lang" element={<Index />} />
+              <Route path="/:lang/blog" element={<BlogList />} />
+              <Route path="/:lang/blog/:id" element={<BlogPost />} />
+              <Route 
+                path="/:lang/blog/manage" 
+                element={
+                  <ProtectedRoute>
+                    <BlogManage />
+                  </ProtectedRoute>
+                } 
+              />
+              <Route 
+                path="/:lang/blog/create" 
+                element={
+                  <ProtectedRoute>
+                    <BlogEditor />
+                  </ProtectedRoute>
+                } 
+              />
+              <Route 
+                path="/:lang/blog/edit/:id" 
+                element={
+                  <ProtectedRoute>
+                    <BlogEditor />
+                  </ProtectedRoute>
+                } 
+              />
+              
+              {/* Default routes (no language prefix) */}
+              <Route path="/" element={<Index />} />
+              <Route path="/blog" element={<BlogList />} />
+              <Route path="/blog/:id" element={<BlogPost />} />
+              <Route 
+                path="/blog/manage" 
+                element={
+                  <ProtectedRoute>
+                    <BlogManage />
+                  </ProtectedRoute>
+                } 
+              />
+              <Route 
+                path="/blog/create" 
+                element={
+                  <ProtectedRoute>
+                    <BlogEditor />
+                  </ProtectedRoute>
+                } 
+              />
+              <Route 
+                path="/blog/edit/:id" 
+                element={
+                  <ProtectedRoute>
+                    <BlogEditor />
+                  </ProtectedRoute>
+                } 
+              />
+              
+              {/* Catch-all route */}
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </LanguageRoute>
         </BrowserRouter>
       </TooltipProvider>
     </AuthProvider>

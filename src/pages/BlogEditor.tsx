@@ -1,3 +1,4 @@
+
 import { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { Save, Image, ArrowLeft } from 'lucide-react';
@@ -12,23 +13,51 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@/components/ui/tabs";
 import { toast } from "sonner";
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { BlogPost } from '@/components/Blogs';
 import RichTextEditor from '@/components/RichTextEditor';
 import { useAuth } from '@/contexts/AuthContext';
+import { useTranslation } from 'react-i18next';
+import { supportedLanguages } from '@/i18n';
 
-// Sample mock data
+// Sample mock data with multilingual support
 const mockBlogPosts = [
   {
     id: 1,
-    title: 'The Future of Code Collaboration',
-    excerpt: 'Exploring how AI will transform how teams work together on code projects.',
-    content: '<p>The landscape of software development is rapidly evolving...</p>',
+    title: {
+      en: 'The Future of Code Collaboration',
+      vi: 'Tương Lai của Hợp Tác Mã Nguồn',
+      ja: 'コード協力の未来',
+      zh: '代码协作的未来'
+    },
+    excerpt: {
+      en: 'Exploring how AI will transform how teams work together on code projects.',
+      vi: 'Khám phá cách AI sẽ biến đổi cách các nhóm làm việc cùng nhau trên các dự án mã nguồn.',
+      ja: 'AIがコードプロジェクトでチームの協力方法をどのように変革するかを探ります。',
+      zh: '探索人工智能将如何改变团队在代码项目上的协作方式。'
+    },
+    content: {
+      en: '<p>The landscape of software development is rapidly evolving...</p>',
+      vi: '<p>Bối cảnh phát triển phần mềm đang phát triển nhanh chóng...</p>',
+      ja: '<p>ソフトウェア開発の風景は急速に進化しています...</p>',
+      zh: '<p>软件开发的格局正在迅速发展...</p>'
+    },
     publishedDate: '2023-09-15',
     author: 'Alex Rivera',
-    readTime: '5 min read',
+    readTime: {
+      en: '5 min read',
+      vi: '5 phút đọc',
+      ja: '5分で読める',
+      zh: '5分钟阅读'
+    },
     category: 'AI',
     thumbnail: 'https://images.unsplash.com/photo-1571171637578-41bc2dd41cd2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80',
     status: 'Published'
@@ -36,8 +65,16 @@ const mockBlogPosts = [
   // Other posts would be here
 ];
 
-interface ExtendedBlogPost extends BlogPost {
-  content?: string;
+// Extended BlogPost interface with multilingual support
+interface MultilingualContent {
+  [key: string]: string;
+}
+
+interface ExtendedBlogPost extends Omit<BlogPost, 'title' | 'excerpt' | 'content' | 'readTime'> {
+  title: MultilingualContent;
+  excerpt: MultilingualContent;
+  content?: MultilingualContent;
+  readTime: MultilingualContent;
   status?: 'Published' | 'Draft';
 }
 
@@ -48,15 +85,28 @@ const BlogEditor = () => {
   const navigate = useNavigate();
   const isEditing = id !== undefined;
   const { user } = useAuth();
+  const { t, i18n } = useTranslation();
+  
+  const [currentLanguage, setCurrentLanguage] = useState<string>(i18n.language || 'en');
+  
+  const emptyMultilingualContent = Object.keys(supportedLanguages).reduce((acc, lang) => {
+    acc[lang] = '';
+    return acc;
+  }, {} as MultilingualContent);
+  
+  const emptyReadTime = Object.keys(supportedLanguages).reduce((acc, lang) => {
+    acc[lang] = '';
+    return acc;
+  }, {} as MultilingualContent);
   
   const [post, setPost] = useState<ExtendedBlogPost>({
     id: 0,
-    title: '',
-    excerpt: '',
-    content: '',
+    title: { ...emptyMultilingualContent },
+    excerpt: { ...emptyMultilingualContent },
+    content: { ...emptyMultilingualContent },
     publishedDate: new Date().toISOString().split('T')[0],
     author: user?.name || '',
-    readTime: '',
+    readTime: { ...emptyReadTime },
     category: '',
     thumbnail: '',
     status: 'Draft'
@@ -72,7 +122,7 @@ const BlogEditor = () => {
       setTimeout(() => {
         const foundPost = mockBlogPosts.find(p => p.id === Number(id));
         if (foundPost) {
-          setPost(foundPost as ExtendedBlogPost);
+          setPost(foundPost as unknown as ExtendedBlogPost);
         }
         setLoading(false);
       }, 500);
@@ -85,33 +135,60 @@ const BlogEditor = () => {
     }
   }, [id, isEditing, user]);
   
-  const handleInputChange = (field: keyof ExtendedBlogPost, value: string) => {
+  const handleInputChange = (field: keyof ExtendedBlogPost, value: any) => {
     setPost(prev => ({ ...prev, [field]: value }));
+  };
+  
+  const handleLocalizedInputChange = (field: 'title' | 'excerpt' | 'content', language: string, value: string) => {
+    setPost(prev => ({
+      ...prev,
+      [field]: {
+        ...prev[field],
+        [language]: value
+      }
+    }));
   };
   
   const calculateReadTime = useCallback((content: string) => {
     // Simple algorithm: average reading speed is ~225 words per minute
     const wordCount = content.split(/\s+/).length;
     const minutes = Math.ceil(wordCount / 225);
-    return `${minutes} min read`;
+    
+    const readTimes = {
+      en: `${minutes} min read`,
+      vi: `${minutes} phút đọc`,
+      ja: `${minutes}分で読める`,
+      zh: `${minutes}分钟阅读`
+    };
+    
+    return readTimes;
   }, []);
   
   useEffect(() => {
     // Auto-calculate read time when content changes
     if (post.content) {
-      const readTime = calculateReadTime(post.content);
-      setPost(prev => ({ ...prev, readTime }));
+      const contentToCalculate = post.content[currentLanguage] || '';
+      if (contentToCalculate) {
+        const readTimes = calculateReadTime(contentToCalculate);
+        setPost(prev => ({ 
+          ...prev, 
+          readTime: {
+            ...prev.readTime,
+            ...readTimes
+          }
+        }));
+      }
     }
-  }, [post.content, calculateReadTime]);
+  }, [post.content, currentLanguage, calculateReadTime]);
   
   const handleSave = async (status: 'Draft' | 'Published') => {
-    if (!post.title) {
-      toast.error("Title is required");
+    if (!post.title[currentLanguage]) {
+      toast.error(t('blogEditor.titleRequired'));
       return;
     }
     
-    if (!post.content) {
-      toast.error("Content is required");
+    if (!post.content?.[currentLanguage]) {
+      toast.error(t('blogEditor.contentRequired'));
       return;
     }
     
@@ -127,8 +204,8 @@ const BlogEditor = () => {
       };
       
       toast.success(isEditing 
-        ? `Blog post ${status === 'Published' ? 'published' : 'saved as draft'} successfully`
-        : `New blog post ${status === 'Published' ? 'published' : 'saved as draft'} successfully`
+        ? status === 'Published' ? t('blogEditor.publishedSuccess') : t('blogEditor.savedAsDraft')
+        : status === 'Published' ? t('blogEditor.publishedSuccess') : t('blogEditor.savedAsDraft')
       );
       
       setSaving(false);
@@ -164,10 +241,10 @@ const BlogEditor = () => {
               <div>
                 <Link to="/blog/manage" className="inline-flex items-center text-brand-600 hover:text-brand-700 mb-2 transition-colors">
                   <ArrowLeft size={16} className="mr-2" />
-                  Back to Manage Posts
+                  {t('blogEditor.backToManagePosts')}
                 </Link>
                 <h1 className="text-3xl font-bold">
-                  {isEditing ? 'Edit Blog Post' : 'Create Blog Post'}
+                  {isEditing ? t('blogEditor.editBlogPost') : t('blogEditor.createBlogPost')}
                 </h1>
               </div>
               
@@ -177,7 +254,7 @@ const BlogEditor = () => {
                   onClick={() => handleSave('Draft')}
                   disabled={saving}
                 >
-                  Save as Draft
+                  {t('blogEditor.saveAsDraft')}
                 </Button>
                 <Button 
                   className="bg-brand-600 hover:bg-brand-700 text-white"
@@ -185,42 +262,62 @@ const BlogEditor = () => {
                   disabled={saving}
                 >
                   <Save size={16} className="mr-2" />
-                  {saving ? 'Saving...' : 'Publish'}
+                  {saving ? t('blogEditor.saving') : t('blogEditor.publish')}
                 </Button>
               </div>
             </div>
             
             <div className="bg-white shadow-md rounded-lg p-6 mb-8">
               <div className="grid grid-cols-1 gap-6">
+                {/* Language selector for content */}
+                <div>
+                  <Label htmlFor="contentLanguage">{t('blogEditor.languageSelector')}</Label>
+                  <Select
+                    value={currentLanguage}
+                    onValueChange={setCurrentLanguage}
+                  >
+                    <SelectTrigger id="contentLanguage">
+                      <SelectValue placeholder={t('blogEditor.selectLanguage')} />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {Object.entries(supportedLanguages).map(([code, name]) => (
+                        <SelectItem key={code} value={code}>
+                          {t(`language.${name.toLowerCase()}`)}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                
                 {/* Title */}
                 <div>
-                  <Label htmlFor="title">Title</Label>
+                  <Label htmlFor="title">{t('blogManage.title')}</Label>
                   <Input 
                     id="title"
-                    placeholder="Enter blog post title"
-                    value={post.title}
-                    onChange={(e) => handleInputChange('title', e.target.value)}
+                    placeholder={t('blogEditor.titlePlaceholder')}
+                    value={post.title[currentLanguage] || ''}
+                    onChange={(e) => handleLocalizedInputChange('title', currentLanguage, e.target.value)}
                   />
                 </div>
                 
                 {/* Excerpt */}
                 <div>
-                  <Label htmlFor="excerpt">Excerpt</Label>
+                  <Label htmlFor="excerpt">{t('blogManage.excerpt')}</Label>
                   <Textarea 
                     id="excerpt"
-                    placeholder="Brief summary of the post"
-                    value={post.excerpt}
-                    onChange={(e) => handleInputChange('excerpt', e.target.value)}
+                    placeholder={t('blogEditor.excerptPlaceholder')}
+                    value={post.excerpt[currentLanguage] || ''}
+                    onChange={(e) => handleLocalizedInputChange('excerpt', currentLanguage, e.target.value)}
                   />
                 </div>
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   {/* Author */}
                   <div>
-                    <Label htmlFor="author">Author</Label>
+                    <Label htmlFor="author">{t('blogManage.author')}</Label>
                     <Input 
                       id="author"
-                      placeholder="Enter author name"
+                      placeholder={t('blogEditor.authorPlaceholder')}
                       value={post.author}
                       onChange={(e) => handleInputChange('author', e.target.value)}
                     />
@@ -228,13 +325,13 @@ const BlogEditor = () => {
                   
                   {/* Category */}
                   <div>
-                    <Label htmlFor="category">Category</Label>
+                    <Label htmlFor="category">{t('blogManage.category')}</Label>
                     <Select
                       value={post.category}
                       onValueChange={(value) => handleInputChange('category', value)}
                     >
                       <SelectTrigger id="category">
-                        <SelectValue placeholder="Select a category" />
+                        <SelectValue placeholder={t('blogEditor.selectCategory')} />
                       </SelectTrigger>
                       <SelectContent>
                         {categories.map((category) => (
@@ -249,10 +346,10 @@ const BlogEditor = () => {
                 
                 {/* Thumbnail URL */}
                 <div>
-                  <Label htmlFor="thumbnail">Thumbnail URL</Label>
+                  <Label htmlFor="thumbnail">{t('blogManage.thumbnail')}</Label>
                   <Input 
                     id="thumbnail"
-                    placeholder="Enter image URL"
+                    placeholder={t('blogEditor.thumbnailPlaceholder')}
                     value={post.thumbnail}
                     onChange={(e) => handleInputChange('thumbnail', e.target.value)}
                   />
@@ -260,7 +357,7 @@ const BlogEditor = () => {
                     <div className="mt-2 h-32 w-full sm:w-64 rounded overflow-hidden">
                       <img 
                         src={post.thumbnail} 
-                        alt="Thumbnail preview" 
+                        alt={t('blogEditor.thumbnailPreview')} 
                         className="w-full h-full object-cover"
                         onError={(e) => {
                           const target = e.target as HTMLImageElement;
@@ -273,18 +370,19 @@ const BlogEditor = () => {
                 
                 {/* Content with WYSIWYG editor */}
                 <div>
-                  <Label htmlFor="content">Content</Label>
+                  <Label htmlFor="content">{t('blogEditor.content')}</Label>
                   <RichTextEditor 
-                    value={post.content || ''}
-                    onChange={(value) => handleInputChange('content', value)}
+                    value={post.content?.[currentLanguage] || ''}
+                    onChange={(value) => handleLocalizedInputChange('content', currentLanguage, value)}
+                    placeholder={`${t(`language.${supportedLanguages[currentLanguage].toLowerCase()}`)} ${t('blogEditor.content')}`}
                   />
                 </div>
                 
                 {/* Read Time (calculated automatically, shown for reference) */}
                 <div>
-                  <Label>Estimated Read Time</Label>
+                  <Label>{t('blogEditor.estimatedReadTime')}</Label>
                   <div className="text-sm text-neutral-500 bg-neutral-50 py-2 px-3 border rounded">
-                    {post.readTime || 'Will be calculated from content'}
+                    {post.readTime?.[currentLanguage] || t('blogEditor.willBeCalculated')}
                   </div>
                 </div>
               </div>
