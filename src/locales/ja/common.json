@@ -8,7 +8,8 @@
     "contact": "お問い合わせ",
     "login": "ログイン",
     "signup": "登録",
-    "manageBlog": "ブログ管理"
+    "manageBlog": "ブログ管理",
+    "logout": "ログアウト"
   },
   "blog": {
     "latestFromBlog": "最新のブログ記事",
@@ -86,5 +87,92 @@
     "japanese": "日本語",
     "chinese": "中国語",
     "selectLanguage": "言語を選択"
+  },
+  "auth": {
+    "title": "認証",
+    "description": "ログインまたはアカウント作成して管理機能にアクセスしてください。",
+    "email": "メールアドレス",
+    "password": "パスワード",
+    "name": "名前",
+    "createAccount": "アカウント作成",
+    "loginSuccess": "ログインに成功しました",
+    "loginError": "ログインに失敗しました",
+    "signupSuccess": "アカウントが正常に作成されました",
+    "signupError": "アカウント作成に失敗しました"
+  },
+  "common": {
+    "loading": "読み込み中...",
+    "save": "保存",
+    "cancel": "キャンセル",
+    "delete": "削除",
+    "edit": "編集",
+    "view": "表示",
+    "search": "検索",
+    "filter": "フィルター",
+    "apply": "適用",
+    "clear": "クリア",
+    "close": "閉じる",
+    "open": "開く",
+    "success": "成功",
+    "error": "エラー",
+    "warning": "警告",
+    "info": "情報"
+  },
+  "features": {
+    "title": "必要なものすべてを一箇所に",
+    "description": "RecodePushは開発ワークフローを最初から最後まで合理化するための強力な機能を組み合わせています。",
+    "automatedCodeReviews": "自動コードレビュー",
+    "automatedCodeReviewsDesc": "手動レビューを待たずに、コードに関するインテリジェントなフィードバックを得ることができます。",
+    "teamCollaboration": "チームコラボレーション",
+    "teamCollaborationDesc": "世界中のどこにいても、チームとシームレスに連携できます。",
+    "lightningFastDeployments": "超高速デプロイメント",
+    "lightningFastDeploymentsDesc": "数時間ではなく、数分でコードを本番環境にデプロイできます。",
+    "enterpriseGradeSecurity": "エンタープライズグレードのセキュリティ",
+    "enterpriseGradeSecurityDesc": "エンドツーエンドの暗号化とコンプライアンスツールでコードが安全です。",
+    "advancedAnalytics": "高度な分析",
+    "advancedAnalyticsDesc": "開発プロセスとチームのパフォーマンスに関する洞察を得ることができます。",
+    "versionControl": "バージョン管理",
+    "versionControlDesc": "変更を追跡し、簡単に過去のバージョンに戻すことができます。"
+  },
+  "cta": {
+    "title": "開発ワークフローを変革する",
+    "description": "インテリジェントなコラボレーションプラットフォームで、より良いコードをより速く提供します。今すぐ始めて違いを実感してください。",
+    "startTrial": "14日間の無料トライアルを開始",
+    "scheduleDemo": "デモをスケジュール",
+    "joinThousands": "RecodePushを信頼している何千もの開発者に参加"
+  },
+  "faq": {
+    "title": "よくある質問",
+    "description": "質問がありますか？私たちが答えます。お探しのものが見つからない場合は、サポートチームにお問い合わせください。"
+  },
+  "contact": {
+    "title": "質問がありますか？お問い合わせください",
+    "description": "私たちのチームは、開発ワークフローの変革をお手伝いする準備ができています。以下のフォームに記入していただければ、すぐにご連絡いたします。",
+    "emailUs": "メールでのお問い合わせ",
+    "emailDescription": "フレンドリーなチームがお手伝いします。",
+    "callUs": "お電話でのお問い合わせ",
+    "callDescription": "月曜日から金曜日の午前8時から午後5時まで。",
+    "visitUs": "オフィスへのご訪問",
+    "visitDescription": "オフィスにお越しになってご挨拶ください。",
+    "communityTitle": "コミュニティに参加する",
+    "communityDescription": "他の開発者と繋がり、チームからの最新情報を入手しましょう。",
+    "name": "名前",
+    "email": "メールアドレス",
+    "phone": "電話番号（任意）",
+    "message": "メッセージ",
+    "messagePlaceholder": "プロジェクトや質問について教えてください...",
+    "sendMessage": "メッセージを送信",
+    "sending": "送信中...",
+    "responseTime": "24時間以内に返信いたします"
+  },
+  "footer": {
+    "description": "開発者がコードを共同作業、レビュー、デプロイする方法を変革します。",
+    "product": "製品",
+    "resources": "リソース",
+    "company": "会社",
+    "allRightsReserved": "All rights reserved.",
+    "privacy": "プライバシー",
+    "terms": "利用規約",
+    "cookies": "クッキー"
   }
 }

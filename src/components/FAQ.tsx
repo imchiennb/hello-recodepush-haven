@@ -1,41 +1,43 @@
 
 import { useState } from 'react';
 import { ChevronDown, ChevronUp } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 type FAQItem = {
   question: string;
   answer: string;
 };
 
-const faqs: FAQItem[] = [
-  {
-    question: "How does the 14-day free trial work?",
-    answer: "Our free trial gives you full access to all features of your chosen plan for 14 days. No credit card is required to start. At the end of your trial, you can choose to subscribe or your account will automatically downgrade to our limited free tier.",
-  },
-  {
-    question: "Can I switch plans later?",
-    answer: "Yes, you can upgrade, downgrade, or change your plan at any time. If you upgrade, the new pricing takes effect immediately. If you downgrade, the new pricing takes effect at the start of your next billing cycle.",
-  },
-  {
-    question: "Is there a limit to how many repositories I can connect?",
-    answer: "No, all our plans offer unlimited repository connections. The difference between plans is in the number of team members, features, and the level of support.",
-  },
-  {
-    question: "Do you offer discounts for startups or non-profits?",
-    answer: "Yes, we offer special pricing for eligible startups, non-profit organizations, and educational institutions. Please contact our sales team to learn more.",
-  },
-  {
-    question: "What kind of support do you offer?",
-    answer: "The level of support depends on your plan. The Starter plan includes community forum access and standard email support. Professional plan users receive priority email support and chat during business hours. Enterprise customers get 24/7 dedicated support with a dedicated account manager.",
-  },
-  {
-    question: "How secure is my code with RecodePush?",
-    answer: "We take security very seriously. Your code is encrypted both in transit and at rest. We use industry-standard security practices, including regular security audits. We never store your source code on our servers longer than necessary to perform the requested operations.",
-  },
-];
-
 const FAQ = () => {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
+  const { t } = useTranslation();
+
+  const faqs: FAQItem[] = [
+    {
+      question: t("How does the 14-day free trial work?"),
+      answer: t("Our free trial gives you full access to all features of your chosen plan for 14 days. No credit card is required to start. At the end of your trial, you can choose to subscribe or your account will automatically downgrade to our limited free tier."),
+    },
+    {
+      question: t("Can I switch plans later?"),
+      answer: t("Yes, you can upgrade, downgrade, or change your plan at any time. If you upgrade, the new pricing takes effect immediately. If you downgrade, the new pricing takes effect at the start of your next billing cycle."),
+    },
+    {
+      question: t("Is there a limit to how many repositories I can connect?"),
+      answer: t("No, all our plans offer unlimited repository connections. The difference between plans is in the number of team members, features, and the level of support."),
+    },
+    {
+      question: t("Do you offer discounts for startups or non-profits?"),
+      answer: t("Yes, we offer special pricing for eligible startups, non-profit organizations, and educational institutions. Please contact our sales team to learn more."),
+    },
+    {
+      question: t("What kind of support do you offer?"),
+      answer: t("The level of support depends on your plan. The Starter plan includes community forum access and standard email support. Professional plan users receive priority email support and chat during business hours. Enterprise customers get 24/7 dedicated support with a dedicated account manager."),
+    },
+    {
+      question: t("How secure is my code with RecodePush?"),
+      answer: t("We take security very seriously. Your code is encrypted both in transit and at rest. We use industry-standard security practices, including regular security audits. We never store your source code on our servers longer than necessary to perform the requested operations."),
+    },
+  ];
 
   const toggleFAQ = (index: number) => {
     setOpenIndex(openIndex === index ? null : index);
@@ -49,10 +51,10 @@ const FAQ = () => {
             FAQ
           </span>
           <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            Frequently Asked Questions
+            {t('faq.title')}
           </h2>
           <p className="text-lg text-neutral-600">
-            Have questions? We've got answers. If you can't find what you're looking for, feel free to contact our support team.
+            {t('faq.description')}
           </p>
         </div>
 

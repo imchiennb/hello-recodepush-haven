@@ -2,28 +2,30 @@
 import { Button } from '@/components/ui/button';
 import { ArrowRight, Star } from 'lucide-react';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 const CTA = () => {
   const [isHoveredTrial, setIsHoveredTrial] = useState(false);
   const [isHoveredDemo, setIsHoveredDemo] = useState(false);
+  const { t } = useTranslation();
   
   return (
     <section className="py-24 bg-gradient-to-r from-brand-600 to-brand-800 text-white relative overflow-hidden">
       <div className="container relative z-10">
         <div className="max-w-3xl mx-auto text-center">
           <span className="inline-block px-4 py-1.5 mb-5 rounded-full bg-white/20 text-white backdrop-blur-sm text-sm font-medium animate-fade-down">
-            <Star className="inline-block w-4 h-4 mr-2" /> Join thousands of developers who trust RecodePush
+            <Star className="inline-block w-4 h-4 mr-2" /> {t('cta.joinThousands')}
           </span>
           
           <h2 className="text-3xl md:text-5xl font-bold mb-6 leading-tight">
-            Transform Your Development <span className="relative inline-block">
+            {t('cta.title')} <span className="relative inline-block">
               <span className="relative z-10">Workflow</span>
               <span className="absolute bottom-1 left-0 w-full h-3 bg-brand-400/30 rounded"></span>
             </span>
           </h2>
           
           <p className="text-xl text-white/90 mb-10 max-w-2xl mx-auto">
-            Ship better code, faster with our intelligent collaboration platform. Get started today and see the difference.
+            {t('cta.description')}
           </p>
           
           <div className="flex flex-col sm:flex-row items-center justify-center gap-5">
@@ -33,7 +35,7 @@ const CTA = () => {
               onMouseLeave={() => setIsHoveredTrial(false)}
               onClick={() => window.location.href = '#pricing'}
             >
-              Start 14-Day Free Trial
+              {t('cta.startTrial')}
               <ArrowRight className={`ml-2 h-5 w-5 transition-transform duration-300 ${isHoveredTrial ? 'translate-x-1' : ''}`} />
             </Button>
             <Button 
@@ -43,7 +45,7 @@ const CTA = () => {
               onMouseLeave={() => setIsHoveredDemo(false)}
               onClick={() => window.location.href = '#contact'}
             >
-              Schedule a Demo
+              {t('cta.scheduleDemo')}
             </Button>
           </div>
         </div>

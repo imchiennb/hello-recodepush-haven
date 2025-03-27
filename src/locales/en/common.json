@@ -8,7 +8,8 @@
     "contact": "Contact",
     "login": "Login",
     "signup": "Sign Up",
-    "manageBlog": "Manage Blog"
+    "manageBlog": "Manage Blog",
+    "logout": "Logout"
   },
   "blog": {
     "latestFromBlog": "Latest From Our Blog",
@@ -86,5 +87,92 @@
     "japanese": "Japanese",
     "chinese": "Chinese",
     "selectLanguage": "Select Language"
+  },
+  "auth": {
+    "title": "Authentication",
+    "description": "Login or create an account to access admin features.",
+    "email": "Email",
+    "password": "Password",
+    "name": "Name",
+    "createAccount": "Create Account",
+    "loginSuccess": "Logged in successfully",
+    "loginError": "Failed to login",
+    "signupSuccess": "Account created successfully",
+    "signupError": "Failed to create account"
+  },
+  "common": {
+    "loading": "Loading...",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "view": "View",
+    "search": "Search",
+    "filter": "Filter",
+    "apply": "Apply",
+    "clear": "Clear",
+    "close": "Close",
+    "open": "Open",
+    "success": "Success",
+    "error": "Error",
+    "warning": "Warning",
+    "info": "Info"
+  },
+  "features": {
+    "title": "Everything You Need in One Place",
+    "description": "RecodePush combines powerful features to streamline your development workflow from start to finish.",
+    "automatedCodeReviews": "Automated Code Reviews",
+    "automatedCodeReviewsDesc": "Get intelligent feedback on your code without waiting for manual reviews.",
+    "teamCollaboration": "Team Collaboration",
+    "teamCollaborationDesc": "Work seamlessly with your team, no matter where they are in the world.",
+    "lightningFastDeployments": "Lightning Fast Deployments",
+    "lightningFastDeploymentsDesc": "Deploy your code to production in minutes, not hours.",
+    "enterpriseGradeSecurity": "Enterprise-Grade Security",
+    "enterpriseGradeSecurityDesc": "Your code is secure with end-to-end encryption and compliance tools.",
+    "advancedAnalytics": "Advanced Analytics",
+    "advancedAnalyticsDesc": "Get insights into your development process and team performance.",
+    "versionControl": "Version Control",
+    "versionControlDesc": "Track changes and revert to previous versions with ease."
+  },
+  "cta": {
+    "title": "Transform Your Development Workflow",
+    "description": "Ship better code, faster with our intelligent collaboration platform. Get started today and see the difference.",
+    "startTrial": "Start 14-Day Free Trial",
+    "scheduleDemo": "Schedule a Demo",
+    "joinThousands": "Join thousands of developers who trust RecodePush"
+  },
+  "faq": {
+    "title": "Frequently Asked Questions",
+    "description": "Have questions? We've got answers. If you can't find what you're looking for, feel free to contact our support team."
+  },
+  "contact": {
+    "title": "Have Questions? Contact Us",
+    "description": "Our team is ready to help you transform your development workflow. Fill out the form below and we'll get back to you shortly.",
+    "emailUs": "Email Us",
+    "emailDescription": "Our friendly team is here to help.",
+    "callUs": "Call Us",
+    "callDescription": "Mon-Fri from 8am to 5pm.",
+    "visitUs": "Visit Us",
+    "visitDescription": "Come say hello at our office.",
+    "communityTitle": "Join Our Community",
+    "communityDescription": "Connect with other developers and get the latest updates from our team.",
+    "name": "Name",
+    "email": "Email",
+    "phone": "Phone (Optional)",
+    "message": "Message",
+    "messagePlaceholder": "Tell us about your project or questions...",
+    "sendMessage": "Send Message",
+    "sending": "Sending...",
+    "responseTime": "We'll respond within 24 hours"
+  },
+  "footer": {
+    "description": "Transforming how developers collaborate, review, and deploy code.",
+    "product": "Product",
+    "resources": "Resources",
+    "company": "Company",
+    "allRightsReserved": "All rights reserved.",
+    "privacy": "Privacy",
+    "terms": "Terms",
+    "cookies": "Cookies"
   }
 }

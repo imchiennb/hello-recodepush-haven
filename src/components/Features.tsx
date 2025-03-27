@@ -1,52 +1,55 @@
 
 import { Code, Users, Zap, Shield, BarChart, GitCompare } from 'lucide-react';
-
-const features = [
-  {
-    title: 'Automated Code Reviews',
-    description: 'Get intelligent feedback on your code without waiting for manual reviews.',
-    icon: <Code className="h-10 w-10 text-brand-500" />,
-  },
-  {
-    title: 'Team Collaboration',
-    description: 'Work seamlessly with your team, no matter where they are in the world.',
-    icon: <Users className="h-10 w-10 text-brand-500" />,
-  },
-  {
-    title: 'Lightning Fast Deployments',
-    description: 'Deploy your code to production in minutes, not hours.',
-    icon: <Zap className="h-10 w-10 text-brand-500" />,
-  },
-  {
-    title: 'Enterprise-Grade Security',
-    description: 'Your code is secure with end-to-end encryption and compliance tools.',
-    icon: <Shield className="h-10 w-10 text-brand-500" />,
-  },
-  {
-    title: 'Advanced Analytics',
-    description: 'Get insights into your development process and team performance.',
-    icon: <BarChart className="h-10 w-10 text-brand-500" />,
-  },
-  {
-    title: 'Version Control',
-    description: 'Track changes and revert to previous versions with ease.',
-    icon: <GitCompare className="h-10 w-10 text-brand-500" />,
-  },
-];
+import { useTranslation } from 'react-i18next';
 
 const Features = () => {
+  const { t } = useTranslation();
+  
+  const features = [
+    {
+      title: t('features.automatedCodeReviews'),
+      description: t('features.automatedCodeReviewsDesc'),
+      icon: <Code className="h-10 w-10 text-brand-500" />,
+    },
+    {
+      title: t('features.teamCollaboration'),
+      description: t('features.teamCollaborationDesc'),
+      icon: <Users className="h-10 w-10 text-brand-500" />,
+    },
+    {
+      title: t('features.lightningFastDeployments'),
+      description: t('features.lightningFastDeploymentsDesc'),
+      icon: <Zap className="h-10 w-10 text-brand-500" />,
+    },
+    {
+      title: t('features.enterpriseGradeSecurity'),
+      description: t('features.enterpriseGradeSecurityDesc'),
+      icon: <Shield className="h-10 w-10 text-brand-500" />,
+    },
+    {
+      title: t('features.advancedAnalytics'),
+      description: t('features.advancedAnalyticsDesc'),
+      icon: <BarChart className="h-10 w-10 text-brand-500" />,
+    },
+    {
+      title: t('features.versionControl'),
+      description: t('features.versionControlDesc'),
+      icon: <GitCompare className="h-10 w-10 text-brand-500" />,
+    },
+  ];
+
   return (
     <section id="features" className="py-24 bg-white">
       <div className="container">
         <div className="text-center max-w-3xl mx-auto mb-16">
           <span className="inline-block px-3 py-1 rounded-full bg-brand-100 text-brand-700 text-sm font-medium mb-4">
-            Features
+            {t('nav.features')}
           </span>
           <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            Everything You Need in One Place
+            {t('features.title')}
           </h2>
           <p className="text-lg text-neutral-600">
-            RecodePush combines powerful features to streamline your development workflow from start to finish.
+            {t('features.description')}
           </p>
         </div>
 

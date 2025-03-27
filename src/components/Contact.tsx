@@ -9,6 +9,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { toast } from 'sonner';
+import { useTranslation } from 'react-i18next';
 
 const formSchema = z.object({
   name: z.string().min(2, { message: 'Name must be at least 2 characters' }),
@@ -21,6 +22,7 @@ type FormValues = z.infer<typeof formSchema>;
 
 const Contact = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { t } = useTranslation();
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -39,7 +41,7 @@ const Contact = () => {
     await new Promise(resolve => setTimeout(resolve, 1000));
     
     console.log('Form submitted:', data);
-    toast.success('Thanks for reaching out! We\'ll get back to you soon.');
+    toast.success(t('Thanks for reaching out! We\'ll get back to you soon.'));
     form.reset();
     setIsSubmitting(false);
   };
@@ -50,14 +52,13 @@ const Contact = () => {
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-12">
             <span className="inline-block px-4 py-1.5 mb-4 rounded-full bg-brand-100 text-brand-700 text-sm font-medium">
-              Get In Touch
+              {t('nav.contact')}
             </span>
             <h2 className="text-3xl md:text-4xl font-bold mb-4">
-              Have Questions? Contact Us
+              {t('contact.title')}
             </h2>
             <p className="text-lg text-neutral-600 max-w-2xl mx-auto">
-              Our team is ready to help you transform your development workflow. 
-              Fill out the form below and we'll get back to you shortly.
+              {t('contact.description')}
             </p>
           </div>
 
@@ -70,8 +71,8 @@ const Contact = () => {
                       <Mail className="w-5 h-5" />
                     </div>
                     <div className="ml-4">
-                      <h3 className="text-lg font-medium text-neutral-900">Email Us</h3>
-                      <p className="mt-1 text-neutral-600">Our friendly team is here to help.</p>
+                      <h3 className="text-lg font-medium text-neutral-900">{t('contact.emailUs')}</h3>
+                      <p className="mt-1 text-neutral-600">{t('contact.emailDescription')}</p>
                       <a href="mailto:hello@recodepush.com" className="mt-2 inline-block text-brand-600 hover:text-brand-700 font-medium">
                         hello@recodepush.com
                       </a>
@@ -83,8 +84,8 @@ const Contact = () => {
                       <Phone className="w-5 h-5" />
                     </div>
                     <div className="ml-4">
-                      <h3 className="text-lg font-medium text-neutral-900">Call Us</h3>
-                      <p className="mt-1 text-neutral-600">Mon-Fri from 8am to 5pm.</p>
+                      <h3 className="text-lg font-medium text-neutral-900">{t('contact.callUs')}</h3>
+                      <p className="mt-1 text-neutral-600">{t('contact.callDescription')}</p>
                       <a href="tel:+1-555-123-4567" className="mt-2 inline-block text-brand-600 hover:text-brand-700 font-medium">
                         +1 (555) 123-4567
                       </a>
@@ -96,8 +97,8 @@ const Contact = () => {
                       <User className="w-5 h-5" />
                     </div>
                     <div className="ml-4">
-                      <h3 className="text-lg font-medium text-neutral-900">Visit Us</h3>
-                      <p className="mt-1 text-neutral-600">Come say hello at our office.</p>
+                      <h3 className="text-lg font-medium text-neutral-900">{t('contact.visitUs')}</h3>
+                      <p className="mt-1 text-neutral-600">{t('contact.visitDescription')}</p>
                       <p className="mt-2 text-neutral-800">
                         100 Technology Drive<br />
                         San Francisco, CA 94103
@@ -108,9 +109,9 @@ const Contact = () => {
               </div>
               
               <div className="bg-gradient-to-r from-brand-500 to-brand-700 p-6 rounded-xl text-white">
-                <h3 className="text-xl font-semibold mb-3">Join Our Community</h3>
+                <h3 className="text-xl font-semibold mb-3">{t('contact.communityTitle')}</h3>
                 <p className="mb-4 text-white/90">
-                  Connect with other developers and get the latest updates from our team.
+                  {t('contact.communityDescription')}
                 </p>
                 <div className="flex space-x-3">
                   <Button className="bg-white/20 hover:bg-white/30 text-white">
@@ -132,9 +133,9 @@ const Contact = () => {
                       name="name"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Name</FormLabel>
+                          <FormLabel>{t('contact.name')}</FormLabel>
                           <FormControl>
-                            <Input placeholder="Your name" {...field} />
+                            <Input placeholder={t('contact.name')} {...field} />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -146,7 +147,7 @@ const Contact = () => {
                       name="email"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Email</FormLabel>
+                          <FormLabel>{t('contact.email')}</FormLabel>
                           <FormControl>
                             <Input placeholder="your.email@example.com" {...field} />
                           </FormControl>
@@ -161,7 +162,7 @@ const Contact = () => {
                     name="phone"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Phone (Optional)</FormLabel>
+                        <FormLabel>{t('contact.phone')}</FormLabel>
                         <FormControl>
                           <Input placeholder="+1 (555) 000-0000" {...field} />
                         </FormControl>
@@ -175,10 +176,10 @@ const Contact = () => {
                     name="message"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Message</FormLabel>
+                        <FormLabel>{t('contact.message')}</FormLabel>
                         <FormControl>
                           <Textarea 
-                            placeholder="Tell us about your project or questions..."
+                            placeholder={t('contact.messagePlaceholder')}
                             className="min-h-[120px]"
                             {...field}
                           />
@@ -191,14 +192,14 @@ const Contact = () => {
                   <div className="flex items-center justify-between pt-2">
                     <div className="flex items-center text-sm text-neutral-600">
                       <CheckCircle className="w-4 h-4 mr-2 text-brand-500" />
-                      <span>We'll respond within 24 hours</span>
+                      <span>{t('contact.responseTime')}</span>
                     </div>
                     <Button 
                       type="submit" 
                       className="bg-brand-600 hover:bg-brand-700 text-white group shadow-lg hover:shadow-xl transition-all" 
                       disabled={isSubmitting}
                     >
-                      {isSubmitting ? 'Sending...' : 'Send Message'}
+                      {isSubmitting ? t('contact.sending') : t('contact.sendMessage')}
                       <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
                     </Button>
                   </div>

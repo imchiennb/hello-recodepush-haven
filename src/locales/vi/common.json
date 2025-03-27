@@ -8,7 +8,8 @@
     "contact": "Liên hệ",
     "login": "Đăng nhập",
     "signup": "Đăng ký",
-    "manageBlog": "Quản lý Blog"
+    "manageBlog": "Quản lý Blog",
+    "logout": "Đăng xuất"
   },
   "blog": {
     "latestFromBlog": "Bài Viết Mới Nhất",
@@ -86,5 +87,92 @@
     "japanese": "Tiếng Nhật",
     "chinese": "Tiếng Trung",
     "selectLanguage": "Chọn Ngôn Ngữ"
+  },
+  "auth": {
+    "title": "Xác thực",
+    "description": "Đăng nhập hoặc tạo tài khoản để truy cập tính năng quản trị.",
+    "email": "Email",
+    "password": "Mật khẩu",
+    "name": "Tên",
+    "createAccount": "Tạo Tài Khoản",
+    "loginSuccess": "Đăng nhập thành công",
+    "loginError": "Đăng nhập thất bại",
+    "signupSuccess": "Tạo tài khoản thành công",
+    "signupError": "Tạo tài khoản thất bại"
+  },
+  "common": {
+    "loading": "Đang tải...",
+    "save": "Lưu",
+    "cancel": "Hủy",
+    "delete": "Xóa",
+    "edit": "Sửa",
+    "view": "Xem",
+    "search": "Tìm kiếm",
+    "filter": "Lọc",
+    "apply": "Áp dụng",
+    "clear": "Xóa",
+    "close": "Đóng",
+    "open": "Mở",
+    "success": "Thành công",
+    "error": "Lỗi",
+    "warning": "Cảnh báo",
+    "info": "Thông tin"
+  },
+  "features": {
+    "title": "Tất Cả Những Gì Bạn Cần Trong Một Nơi",
+    "description": "RecodePush kết hợp các tính năng mạnh mẽ để tối ưu hóa quy trình phát triển của bạn từ đầu đến cuối.",
+    "automatedCodeReviews": "Đánh Giá Mã Tự Động",
+    "automatedCodeReviewsDesc": "Nhận phản hồi thông minh về mã của bạn mà không cần chờ đợi đánh giá thủ công.",
+    "teamCollaboration": "Hợp Tác Nhóm",
+    "teamCollaborationDesc": "Làm việc suôn sẻ với nhóm của bạn, bất kể họ ở đâu trên thế giới.",
+    "lightningFastDeployments": "Triển Khai Nhanh Chóng",
+    "lightningFastDeploymentsDesc": "Triển khai mã của bạn lên môi trường sản xuất chỉ trong vài phút.",
+    "enterpriseGradeSecurity": "Bảo Mật Cấp Doanh Nghiệp",
+    "enterpriseGradeSecurityDesc": "Mã của bạn được bảo mật với mã hóa đầu cuối và công cụ tuân thủ.",
+    "advancedAnalytics": "Phân Tích Nâng Cao",
+    "advancedAnalyticsDesc": "Hiểu rõ về quy trình phát triển và hiệu suất của nhóm bạn.",
+    "versionControl": "Kiểm Soát Phiên Bản",
+    "versionControlDesc": "Theo dõi thay đổi và hoàn tác về phiên bản trước một cách dễ dàng."
+  },
+  "cta": {
+    "title": "Chuyển Đổi Quy Trình Phát Triển Của Bạn",
+    "description": "Phát hành mã tốt hơn, nhanh hơn với nền tảng hợp tác thông minh của chúng tôi. Bắt đầu ngay hôm nay và xem sự khác biệt.",
+    "startTrial": "Bắt Đầu Dùng Thử 14 Ngày",
+    "scheduleDemo": "Đặt Lịch Demo",
+    "joinThousands": "Tham gia cùng hàng nghìn nhà phát triển tin tưởng RecodePush"
+  },
+  "faq": {
+    "title": "Câu Hỏi Thường Gặp",
+    "description": "Có câu hỏi? Chúng tôi có câu trả lời. Nếu bạn không tìm thấy điều bạn đang tìm kiếm, hãy liên hệ với đội hỗ trợ của chúng tôi."
+  },
+  "contact": {
+    "title": "Có Câu Hỏi? Liên Hệ Với Chúng Tôi",
+    "description": "Đội ngũ của chúng tôi sẵn sàng giúp bạn chuyển đổi quy trình phát triển. Điền vào biểu mẫu dưới đây và chúng tôi sẽ liên hệ lại với bạn sớm.",
+    "emailUs": "Email Cho Chúng Tôi",
+    "emailDescription": "Đội ngũ thân thiện của chúng tôi sẵn sàng giúp đỡ.",
+    "callUs": "Gọi Cho Chúng Tôi",
+    "callDescription": "Thứ Hai đến Thứ Sáu từ 8 giờ đến 17 giờ.",
+    "visitUs": "Đến Thăm Chúng Tôi",
+    "visitDescription": "Hãy đến chào tại văn phòng của chúng tôi.",
+    "communityTitle": "Tham Gia Cộng Đồng Của Chúng Tôi",
+    "communityDescription": "Kết nối với các nhà phát triển khác và nhận các cập nhật mới nhất từ đội của chúng tôi.",
+    "name": "Tên",
+    "email": "Email",
+    "phone": "Điện thoại (Tùy chọn)",
+    "message": "Tin nhắn",
+    "messagePlaceholder": "Hãy cho chúng tôi biết về dự án hoặc câu hỏi của bạn...",
+    "sendMessage": "Gửi Tin Nhắn",
+    "sending": "Đang gửi...",
+    "responseTime": "Chúng tôi sẽ phản hồi trong vòng 24 giờ"
+  },
+  "footer": {
+    "description": "Chuyển đổi cách các nhà phát triển cộng tác, đánh giá và triển khai mã.",
+    "product": "Sản phẩm",
+    "resources": "Tài nguyên",
+    "company": "Công ty",
+    "allRightsReserved": "Đã đăng ký bản quyền.",
+    "privacy": "Quyền riêng tư",
+    "terms": "Điều khoản",
+    "cookies": "Cookie"
   }
 }
