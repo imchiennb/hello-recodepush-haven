@@ -1,11 +1,10 @@
-
-import { useState, useEffect, useCallback } from 'react';
-import { useParams, useNavigate, Link } from 'react-router-dom';
-import { Save, Image, ArrowLeft } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
+import { useState, useEffect, useCallback, useMemo } from "react";
+import { useParams, useNavigate, Link } from "react-router-dom";
+import { Save, Image, ArrowLeft, CloudUpload, Loader2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import {
   Select,
   SelectContent,
@@ -13,209 +12,95 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@/components/ui/tabs";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
+import { BlogPost } from "@/components/Blogs";
+import RichTextEditor from "@/components/RichTextEditor";
+import { useAuth } from "@/contexts/AuthContext";
+import { useTranslation } from "react-i18next";
+import { supportedLanguages } from "@/i18n";
+import { Form, FormProvider, useForm } from "react-hook-form";
+import { useToast } from "@/hooks/use-toast";
 import { toast } from "sonner";
-import Navbar from '@/components/Navbar';
-import Footer from '@/components/Footer';
-import { BlogPost } from '@/components/Blogs';
-import RichTextEditor from '@/components/RichTextEditor';
-import { useAuth } from '@/contexts/AuthContext';
-import { useTranslation } from 'react-i18next';
-import { supportedLanguages } from '@/i18n';
-
-// Sample mock data with multilingual support
-const mockBlogPosts = [
-  {
-    id: 1,
-    title: {
-      en: 'The Future of Code Collaboration',
-      vi: 'Tương Lai của Hợp Tác Mã Nguồn',
-      ja: 'コード協力の未来',
-      zh: '代码协作的未来'
-    },
-    excerpt: {
-      en: 'Exploring how AI will transform how teams work together on code projects.',
-      vi: 'Khám phá cách AI sẽ biến đổi cách các nhóm làm việc cùng nhau trên các dự án mã nguồn.',
-      ja: 'AIがコードプロジェクトでチームの協力方法をどのように変革するかを探ります。',
-      zh: '探索人工智能将如何改变团队在代码项目上的协作方式。'
-    },
-    content: {
-      en: '<p>The landscape of software development is rapidly evolving...</p>',
-      vi: '<p>Bối cảnh phát triển phần mềm đang phát triển nhanh chóng...</p>',
-      ja: '<p>ソフトウェア開発の風景は急速に進化しています...</p>',
-      zh: '<p>软件开发的格局正在迅速发展...</p>'
-    },
-    publishedDate: '2023-09-15',
-    author: 'Alex Rivera',
-    readTime: {
-      en: '5 min read',
-      vi: '5 phút đọc',
-      ja: '5分で読める',
-      zh: '5分钟阅读'
-    },
-    category: 'AI',
-    thumbnail: 'https://images.unsplash.com/photo-1571171637578-41bc2dd41cd2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80',
-    status: 'Published'
-  },
-  // Other posts would be here
-];
-
+import { useMutationCreateBlog } from "@/hooks/blog/use-mutation-create-blog";
+import {
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { useMutationUploadFile } from "@/hooks/upload/use-mutation-upload";
+import { useQueryBlogDetail } from "@/hooks/blog/use-query-blog-detail";
+import { LOCAL_STORAGE_KEYS } from "@/constant/query-keys";
+import { useMutationUpdateBlog } from "@/hooks/blog/use-mutation-update-blog";
 // Extended BlogPost interface with multilingual support
 interface MultilingualContent {
   [key: string]: string;
 }
 
-interface ExtendedBlogPost extends Omit<BlogPost, 'title' | 'excerpt' | 'content' | 'readTime'> {
+interface ExtendedBlogPost
+  extends Omit<BlogPost, "title" | "excerpt" | "content" | "readTime"> {
   title: MultilingualContent;
   excerpt: MultilingualContent;
   content?: MultilingualContent;
   readTime: MultilingualContent;
-  status?: 'Published' | 'Draft';
+  status?: "Published" | "Draft";
 }
 
-const categories = ['AI', 'Development', 'Productivity', 'Collaboration', 'Security', 'Culture'];
+const categories = [
+  "AI",
+  "Development",
+  "Productivity",
+  "Collaboration",
+  "Security",
+  "Culture",
+];
 
 const BlogEditor = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const isEditing = id !== undefined;
-  const { user } = useAuth();
   const { t, i18n } = useTranslation();
-  
-  const [currentLanguage, setCurrentLanguage] = useState<string>(i18n.language || 'en');
-  
-  const emptyMultilingualContent = Object.keys(supportedLanguages).reduce((acc, lang) => {
-    acc[lang] = '';
-    return acc;
-  }, {} as MultilingualContent);
-  
-  const emptyReadTime = Object.keys(supportedLanguages).reduce((acc, lang) => {
-    acc[lang] = '';
-    return acc;
-  }, {} as MultilingualContent);
-  
-  const [post, setPost] = useState<ExtendedBlogPost>({
-    id: 0,
-    title: { ...emptyMultilingualContent },
-    excerpt: { ...emptyMultilingualContent },
-    content: { ...emptyMultilingualContent },
-    publishedDate: new Date().toISOString().split('T')[0],
-    author: user?.name || '',
-    readTime: { ...emptyReadTime },
-    category: '',
-    thumbnail: '',
-    status: 'Draft'
+  const mutationCreateBlog = useMutationCreateBlog();
+  const mutationUpdateBlog = useMutationUpdateBlog();
+  const mutationUploadFile = useMutationUploadFile();
+
+  const { data, isLoading } = useQueryBlogDetail(id);
+
+  const post = useMemo(() => {
+    return data?.data;
+  }, [data]);
+
+  const form = useForm({
+    values: {
+      title: post?.title,
+      summary: post?.summary,
+      thumbnail: post?.thumbnail,
+      content: post?.content,
+      language: post?.language,
+      category: post?.category,
+      publish: post?.publish,
+      author: post?.author,
+    },
   });
-  
-  const [loading, setLoading] = useState(isEditing);
-  const [saving, setSaving] = useState(false);
-  
-  useEffect(() => {
+
+  const handleSave = async (status: "Draft" | "Published") => {
+    const data = form.getValues();
     if (isEditing) {
-      // In a real app, this would be an API call
-      setLoading(true);
-      setTimeout(() => {
-        const foundPost = mockBlogPosts.find(p => p.id === Number(id));
-        if (foundPost) {
-          setPost(foundPost as unknown as ExtendedBlogPost);
-        }
-        setLoading(false);
-      }, 500);
-    } else if (user) {
-      // Set the author to the logged-in user for new posts
-      setPost(prev => ({
-        ...prev,
-        author: user.name
-      }));
+      mutationUpdateBlog.mutate({
+        ...data,
+        id,
+      });
+    } else {
+      mutationCreateBlog.mutate({
+        ...data,
+      });
     }
-  }, [id, isEditing, user]);
-  
-  const handleInputChange = (field: keyof ExtendedBlogPost, value: any) => {
-    setPost(prev => ({ ...prev, [field]: value }));
-  };
-  
-  const handleLocalizedInputChange = (field: 'title' | 'excerpt' | 'content', language: string, value: string) => {
-    setPost(prev => ({
-      ...prev,
-      [field]: {
-        ...prev[field],
-        [language]: value
-      }
-    }));
-  };
-  
-  const calculateReadTime = useCallback((content: string) => {
-    // Simple algorithm: average reading speed is ~225 words per minute
-    const wordCount = content.split(/\s+/).length;
-    const minutes = Math.ceil(wordCount / 225);
-    
-    const readTimes = {
-      en: `${minutes} min read`,
-      vi: `${minutes} phút đọc`,
-      ja: `${minutes}分で読める`,
-      zh: `${minutes}分钟阅读`
-    };
-    
-    return readTimes;
-  }, []);
-  
-  useEffect(() => {
-    // Auto-calculate read time when content changes
-    if (post.content) {
-      const contentToCalculate = post.content[currentLanguage] || '';
-      if (contentToCalculate) {
-        const readTimes = calculateReadTime(contentToCalculate);
-        setPost(prev => ({ 
-          ...prev, 
-          readTime: {
-            ...prev.readTime,
-            ...readTimes
-          }
-        }));
-      }
-    }
-  }, [post.content, currentLanguage, calculateReadTime]);
-  
-  const handleSave = async (status: 'Draft' | 'Published') => {
-    if (!post.title[currentLanguage]) {
-      toast.error(t('blogEditor.titleRequired'));
-      return;
-    }
-    
-    if (!post.content?.[currentLanguage]) {
-      toast.error(t('blogEditor.contentRequired'));
-      return;
-    }
-    
-    // In a real app, this would be an API call
-    setSaving(true);
-    setTimeout(() => {
-      // Update the post in our mock data
-      const updatedPost = {
-        ...post,
-        status,
-        id: isEditing ? Number(id) : Date.now(), // Generate a new ID if creating
-        publishedDate: status === 'Published' ? new Date().toISOString().split('T')[0] : ''
-      };
-      
-      toast.success(isEditing 
-        ? status === 'Published' ? t('blogEditor.publishedSuccess') : t('blogEditor.savedAsDraft')
-        : status === 'Published' ? t('blogEditor.publishedSuccess') : t('blogEditor.savedAsDraft')
-      );
-      
-      setSaving(false);
-      
-      // Navigate back to the blog management page
-      navigate('/blog/manage');
-    }, 1000);
   };
 
-  if (loading) {
+  if (isLoading && isEditing) {
     return (
       <div className="min-h-screen bg-neutral-50">
         <Navbar />
@@ -233,164 +118,291 @@ const BlogEditor = () => {
   return (
     <div className="min-h-screen bg-neutral-50">
       <Navbar />
-      
+
       <main className="pt-32 pb-20">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
             <div className="flex justify-between items-center mb-8">
               <div>
-                <Link to="/blog/manage" className="inline-flex items-center text-brand-600 hover:text-brand-700 mb-2 transition-colors">
+                <Link
+                  to="/blog/manage"
+                  className="inline-flex items-center text-brand-600 hover:text-brand-700 mb-2 transition-colors"
+                >
                   <ArrowLeft size={16} className="mr-2" />
-                  {t('blogEditor.backToManagePosts')}
+                  {t("blogEditor.backToManagePosts")}
                 </Link>
                 <h1 className="text-3xl font-bold">
-                  {isEditing ? t('blogEditor.editBlogPost') : t('blogEditor.createBlogPost')}
+                  {isEditing
+                    ? t("blogEditor.editBlogPost")
+                    : t("blogEditor.createBlogPost")}
                 </h1>
               </div>
-              
+
               <div className="flex gap-2">
-                <Button 
-                  variant="outline" 
-                  onClick={() => handleSave('Draft')}
-                  disabled={saving}
-                >
-                  {t('blogEditor.saveAsDraft')}
+                <Button variant="outline" onClick={() => handleSave("Draft")}>
+                  {t("blogEditor.saveAsDraft")}
                 </Button>
-                <Button 
+                <Button
                   className="bg-brand-600 hover:bg-brand-700 text-white"
-                  onClick={() => handleSave('Published')}
-                  disabled={saving}
+                  onClick={() => handleSave("Published")}
+                  type="submit"
+                  disabled={
+                    mutationCreateBlog.status === "pending" ||
+                    mutationUpdateBlog.status === "pending"
+                  }
                 >
-                  <Save size={16} className="mr-2" />
-                  {saving ? t('blogEditor.saving') : t('blogEditor.publish')}
+                  {mutationCreateBlog.status === "pending" ||
+                  mutationUpdateBlog.status === "pending" ? (
+                    <Loader2 className="animate-spin" />
+                  ) : (
+                    <Save size={16} className="mr-2" />
+                  )}
+                  Save
                 </Button>
               </div>
             </div>
-            
-            <div className="bg-white shadow-md rounded-lg p-6 mb-8">
-              <div className="grid grid-cols-1 gap-6">
-                {/* Language selector for content */}
-                <div>
-                  <Label htmlFor="contentLanguage">{t('blogEditor.languageSelector')}</Label>
-                  <Select
-                    value={currentLanguage}
-                    onValueChange={setCurrentLanguage}
-                  >
-                    <SelectTrigger id="contentLanguage">
-                      <SelectValue placeholder={t('blogEditor.selectLanguage')} />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {Object.entries(supportedLanguages).map(([code, name]) => (
-                        <SelectItem key={code} value={code}>
-                          {t(`language.${name.toLowerCase()}`)}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-                
-                {/* Title */}
-                <div>
-                  <Label htmlFor="title">{t('blogManage.title')}</Label>
-                  <Input 
-                    id="title"
-                    placeholder={t('blogEditor.titlePlaceholder')}
-                    value={post.title[currentLanguage] || ''}
-                    onChange={(e) => handleLocalizedInputChange('title', currentLanguage, e.target.value)}
+            <FormProvider {...form}>
+              <div className="bg-white shadow-md rounded-lg p-6 mb-8">
+                <div className="grid grid-cols-1 gap-6">
+                  {/* Language selector for content */}
+                  <FormField
+                    name="language"
+                    render={({ field }) => {
+                      return (
+                        <FormItem>
+                          <FormLabel htmlFor="contentLanguage">
+                            {t("blogEditor.languageSelector")}
+                          </FormLabel>
+                          <FormControl>
+                            <Select
+                              value={field.value}
+                              onValueChange={(value) => {
+                                field.onChange(value);
+                                form.setValue("language", value);
+                              }}
+                            >
+                              <SelectTrigger id="contentLanguage">
+                                <SelectValue
+                                  placeholder={t("blogEditor.selectLanguage")}
+                                />
+                              </SelectTrigger>
+                              <SelectContent>
+                                {Object.entries(supportedLanguages).map(
+                                  ([code, name]) => (
+                                    <SelectItem key={code} value={code}>
+                                      {t(`language.${name.toLowerCase()}`)}
+                                    </SelectItem>
+                                  )
+                                )}
+                              </SelectContent>
+                            </Select>
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      );
+                    }}
                   />
-                </div>
-                
-                {/* Excerpt */}
-                <div>
-                  <Label htmlFor="excerpt">{t('blogManage.excerpt')}</Label>
-                  <Textarea 
-                    id="excerpt"
-                    placeholder={t('blogEditor.excerptPlaceholder')}
-                    value={post.excerpt[currentLanguage] || ''}
-                    onChange={(e) => handleLocalizedInputChange('excerpt', currentLanguage, e.target.value)}
+
+                  {/* Title */}
+                  <FormField
+                    name="title"
+                    render={({ field }) => {
+                      return (
+                        <FormItem>
+                          <FormLabel htmlFor="title">
+                            {t("blogManage.title")}
+                          </FormLabel>
+                          <FormControl>
+                            <Input
+                              {...field}
+                              id="title"
+                              placeholder={t("blogEditor.titlePlaceholder")}
+                            />
+                          </FormControl>
+                        </FormItem>
+                      );
+                    }}
                   />
-                </div>
-                
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {/* Author */}
-                  <div>
-                    <Label htmlFor="author">{t('blogManage.author')}</Label>
-                    <Input 
-                      id="author"
-                      placeholder={t('blogEditor.authorPlaceholder')}
-                      value={post.author}
-                      onChange={(e) => handleInputChange('author', e.target.value)}
+
+                  {/* Excerpt */}
+                  <FormField
+                    name="summary"
+                    render={({ field }) => {
+                      return (
+                        <FormItem>
+                          <FormLabel htmlFor="excerpt">
+                            {t("blogManage.excerpt")}
+                          </FormLabel>
+                          <FormControl>
+                            <Textarea
+                              {...field}
+                              id="summary"
+                              placeholder={t("blogEditor.excerptPlaceholder")}
+                            />
+                          </FormControl>
+                        </FormItem>
+                      );
+                    }}
+                  />
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {/* Author */}
+                    <FormField
+                      name="author"
+                      render={({ field }) => {
+                        return (
+                          <FormItem>
+                            <FormLabel htmlFor="author">
+                              {t("blogManage.author")}
+                            </FormLabel>
+                            <FormControl>
+                              <Input
+                                {...field}
+                                id="author"
+                                placeholder={t("blogEditor.authorPlaceholder")}
+                              />
+                            </FormControl>
+                          </FormItem>
+                        );
+                      }}
+                    />
+
+                    {/* Category */}
+                    <FormField
+                      name="category"
+                      render={({ field }) => {
+                        return (
+                          <FormItem>
+                            <FormLabel htmlFor="category">
+                              {t("blogManage.category")}
+                            </FormLabel>
+                            <FormControl>
+                              <Select {...field}>
+                                <SelectTrigger id="category">
+                                  <SelectValue
+                                    placeholder={t("blogEditor.selectCategory")}
+                                  />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  {categories.map((category) => (
+                                    <SelectItem key={category} value={category}>
+                                      {category}
+                                    </SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
+                            </FormControl>
+                          </FormItem>
+                        );
+                      }}
                     />
                   </div>
-                  
-                  {/* Category */}
-                  <div>
-                    <Label htmlFor="category">{t('blogManage.category')}</Label>
-                    <Select
-                      value={post.category}
-                      onValueChange={(value) => handleInputChange('category', value)}
-                    >
-                      <SelectTrigger id="category">
-                        <SelectValue placeholder={t('blogEditor.selectCategory')} />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {categories.map((category) => (
-                          <SelectItem key={category} value={category}>
-                            {category}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-                </div>
-                
-                {/* Thumbnail URL */}
-                <div>
-                  <Label htmlFor="thumbnail">{t('blogManage.thumbnail')}</Label>
-                  <Input 
-                    id="thumbnail"
-                    placeholder={t('blogEditor.thumbnailPlaceholder')}
-                    value={post.thumbnail}
-                    onChange={(e) => handleInputChange('thumbnail', e.target.value)}
+
+                  {/* Thumbnail URL */}
+                  <FormField
+                    name="thumbnail"
+                    render={({ field }) => {
+                      return (
+                        <FormItem>
+                          <FormLabel htmlFor="thumbnail">
+                            {t("blogManage.thumbnail")}
+                          </FormLabel>
+                          <FormControl>
+                            <div>
+                              <div className="flex gap-2">
+                                <Input
+                                  disabled
+                                  {...field}
+                                  id="thumbnail"
+                                  value={field.value}
+                                  placeholder={t(
+                                    "blogEditor.thumbnailPlaceholder"
+                                  )}
+                                />
+                                <Button
+                                  variant="outline"
+                                  disabled={
+                                    mutationUploadFile.status === "pending"
+                                  }
+                                  onClick={() => {
+                                    const fileInput =
+                                      document.createElement("input");
+                                    fileInput.type = "file";
+                                    fileInput.accept = "image/*";
+                                    fileInput.onchange = async (e) => {
+                                      const file = (
+                                        e.target as HTMLInputElement
+                                      ).files?.[0];
+                                      if (file) {
+                                        const data =
+                                          await mutationUploadFile.mutateAsync({
+                                            file,
+                                          });
+                                        console.log("xxx2::data", data);
+                                        const fileURI = `${
+                                          import.meta.env.VITE_STORAGE_URL
+                                        }/images/${data.data.filename}`;
+                                        field.onChange(fileURI);
+                                      }
+                                    };
+                                    fileInput.click();
+                                  }}
+                                >
+                                  {mutationUploadFile.status === "pending" ? (
+                                    <Loader2 className="animate-spin" />
+                                  ) : (
+                                    <CloudUpload size={16} />
+                                  )}
+                                </Button>
+                              </div>
+                              {form.getValues()?.thumbnail && (
+                                <div className="mt-4 max-h-[260px] w-auto max-w-[60%] overflow-hidden border-gray-300 inline-block">
+                                  <img
+                                    src={form.getValues()?.thumbnail}
+                                    alt={t("blogEditor.thumbnailPreview")}
+                                    className="w-auto h-full object-cover rounded-sm max-h-[260px]"
+                                    onError={(e) => {
+                                      const target =
+                                        e.target as HTMLImageElement;
+                                      target.src =
+                                        "https://placehold.co/600x400?text=Invalid+Image";
+                                    }}
+                                  />
+                                </div>
+                              )}
+                            </div>
+                          </FormControl>
+                        </FormItem>
+                      );
+                    }}
                   />
-                  {post.thumbnail && (
-                    <div className="mt-2 h-32 w-full sm:w-64 rounded overflow-hidden">
-                      <img 
-                        src={post.thumbnail} 
-                        alt={t('blogEditor.thumbnailPreview')} 
-                        className="w-full h-full object-cover"
-                        onError={(e) => {
-                          const target = e.target as HTMLImageElement;
-                          target.src = 'https://placehold.co/600x400?text=Invalid+Image';
-                        }}
-                      />
-                    </div>
-                  )}
-                </div>
-                
-                {/* Content with WYSIWYG editor */}
-                <div>
-                  <Label htmlFor="content">{t('blogEditor.content')}</Label>
-                  <RichTextEditor 
-                    value={post.content?.[currentLanguage] || ''}
-                    onChange={(value) => handleLocalizedInputChange('content', currentLanguage, value)}
-                    placeholder={`${t(`language.${supportedLanguages[currentLanguage].toLowerCase()}`)} ${t('blogEditor.content')}`}
+
+                  {/* Content with WYSIWYG editor */}
+                  <FormField
+                    name="content"
+                    render={({ field }) => {
+                      return (
+                        <FormItem>
+                          <FormLabel htmlFor="content">
+                            {t("blogEditor.content")}
+                          </FormLabel>
+                          <FormControl>
+                            <RichTextEditor
+                              value={field.value}
+                              onChange={field.onChange}
+                            />
+                          </FormControl>
+                        </FormItem>
+                      );
+                    }}
                   />
-                </div>
-                
-                {/* Read Time (calculated automatically, shown for reference) */}
-                <div>
-                  <Label>{t('blogEditor.estimatedReadTime')}</Label>
-                  <div className="text-sm text-neutral-500 bg-neutral-50 py-2 px-3 border rounded">
-                    {post.readTime?.[currentLanguage] || t('blogEditor.willBeCalculated')}
-                  </div>
                 </div>
               </div>
-            </div>
+            </FormProvider>
           </div>
         </div>
       </main>
-      
+
       <Footer />
     </div>
   );

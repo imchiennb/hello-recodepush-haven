@@ -7,6 +7,7 @@
     "features": "Tính năng",
     "contact": "Liên hệ",
     "login": "Đăng nhập",
+    "logout": "Đăng xuất",
     "signup": "Đăng ký",
     "manageBlog": "Quản lý Blog",
     "logout": "Đăng xuất"
@@ -47,7 +48,9 @@
     "deleteConfirmation": "Bạn có chắc không?",
     "deleteWarning": "Hành động này không thể hoàn tác. Bài viết sẽ bị xóa vĩnh viễn.",
     "cancel": "Hủy",
-    "backToBlog": "Quay Lại Blog"
+    "backToBlog": "Quay Lại Blog",
+    "excerpt": "Tóm tắt",
+    "thumbnail": "Hình ảnh"
   },
   "blogEditor": {
     "editBlogPost": "Chỉnh Sửa Bài Viết",
@@ -74,7 +77,13 @@
     "contentRequired": "Nội dung là bắt buộc",
     "titleRequired": "Tiêu đề là bắt buộc",
     "publishedSuccess": "Bài viết đã được đăng thành công",
-    "savedAsDraft": "Bài viết đã được lưu như bản nháp thành công"
+    "savedAsDraft": "Bài viết đã được lưu như bản nháp thành công",
+    "updateBlogSuccess": "Bài viết đã được cập nhật thành công",
+    "updateBlogError": "Cập nhật bài viết thất bại",
+    "createBlogSuccess": "Bài viết đã được tạo thành công",
+    "createBlogError": "Tạo bài viết thất bại",
+    "deleteBlogSuccess": "Bài viết đã được xóa thành công",
+    "deleteBlogError": "Xóa bài viết thất bại"
   },
   "blogPost": {
     "editArticle": "Chỉnh Sửa Bài Viết",

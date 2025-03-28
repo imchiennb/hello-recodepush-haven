@@ -7,6 +7,7 @@
     "features": "功能",
     "contact": "联系我们",
     "login": "登录",
+    "logout": "登录",
     "signup": "注册",
     "manageBlog": "管理博客",
     "logout": "登出"
@@ -47,7 +48,9 @@
     "deleteConfirmation": "确定吗？",
     "deleteWarning": "此操作无法撤消。将永久删除博客文章。",
     "cancel": "取消",
-    "backToBlog": "返回博客"
+    "backToBlog": "返回博客",
+    "excerpt": "摘要",
+    "thumbnail": "缩略图"
   },
   "blogEditor": {
     "editBlogPost": "编辑博客文章",
@@ -74,7 +77,13 @@
     "contentRequired": "内容为必填项",
     "titleRequired": "标题为必填项",
     "publishedSuccess": "博客文章已成功发布",
-    "savedAsDraft": "博客文章已成功保存为草稿"
+    "savedAsDraft": "博客文章已成功保存为草稿",
+    "updateBlogSuccess": "博客文章已成功更新",
+    "updateBlogError": "博客文章更新失败",
+    "createBlogSuccess": "博客文章已成功创建",
+    "createBlogError": "博客文章创建失败",
+    "deleteBlogSuccess": "博客文章已成功删除",
+    "deleteBlogError": "博客文章删除失败"
   },
   "blogPost": {
     "editArticle": "编辑文章",

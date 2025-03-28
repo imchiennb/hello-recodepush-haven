@@ -1,27 +1,29 @@
-
-import { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
-import { ArrowLeft, Calendar, Clock, Edit } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import Navbar from '@/components/Navbar';
-import Footer from '@/components/Footer';
-import { useTranslation } from 'react-i18next';
+import { useState, useEffect, useMemo } from "react";
+import { useParams, Link } from "react-router-dom";
+import { ArrowLeft, Calendar, Clock, Edit } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
+import { useTranslation } from "react-i18next";
+import { useQueryBlogDetail } from "@/hooks/blog/use-query-blog-detail";
+import { calculateReadingTime } from "@/lib/utils";
+import { LOCAL_STORAGE_KEYS } from "@/constant/query-keys";
 
 // Mock data with multilingual content
 const mockBlogPosts = [
   {
     id: 1,
     title: {
-      en: 'The Future of Code Collaboration',
-      vi: 'Tương Lai của Hợp Tác Mã Nguồn',
-      ja: 'コード協力の未来',
-      zh: '代码协作的未来'
+      en: "The Future of Code Collaboration",
+      vi: "Tương Lai của Hợp Tác Mã Nguồn",
+      ja: "コード協力の未来",
+      zh: "代码协作的未来",
     },
     excerpt: {
-      en: 'Exploring how AI will transform how teams work together on code projects.',
-      vi: 'Khám phá cách AI sẽ biến đổi cách các nhóm làm việc cùng nhau trên các dự án mã nguồn.',
-      ja: 'AIがコードプロジェクトでチームの協力方法をどのように変革するかを探ります。',
-      zh: '探索人工智能将如何改变团队在代码项目上的协作方式。'
+      en: "Exploring how AI will transform how teams work together on code projects.",
+      vi: "Khám phá cách AI sẽ biến đổi cách các nhóm làm việc cùng nhau trên các dự án mã nguồn.",
+      ja: "AIがコードプロジェクトでチームの協力方法をどのように変革するかを探ります。",
+      zh: "探索人工智能将如何改变团队在代码项目上的协作方式。",
     },
     content: {
       en: `
@@ -115,33 +117,34 @@ const mockBlogPosts = [
         <p>随着这些技术的成熟，我们可以期待AI与开发工作流程之间更深入的集成。想象一下，系统可以理解需求文档背后的意图并生成功能原型，或者可以预测代码库中哪些区域可能在未来造成问题。</p>
         
         <p>在RecodePush，我们正在拥抱这些变化，并构建能够增强协作的工具，而不是取代对优秀软件开发至关重要的人类智慧和创造力。</p>
-      `
+      `,
     },
-    publishedDate: '2023-09-15',
-    author: 'Alex Rivera',
+    publishedDate: "2023-09-15",
+    author: "Alex Rivera",
     readTime: {
-      en: '5 min read',
-      vi: '5 phút đọc',
-      ja: '5分で読める',
-      zh: '5分钟阅读'
+      en: "5 min read",
+      vi: "5 phút đọc",
+      ja: "5分で読める",
+      zh: "5分钟阅读",
     },
-    category: 'AI',
-    thumbnail: 'https://images.unsplash.com/photo-1571171637578-41bc2dd41cd2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80'
+    category: "AI",
+    thumbnail:
+      "https://images.unsplash.com/photo-1571171637578-41bc2dd41cd2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80",
   },
   // Other blog posts with content...
   {
     id: 2,
     title: {
-      en: 'Building Scalable Applications with RecodePush',
-      vi: 'Xây Dựng Ứng Dụng Có Khả Năng Mở Rộng với RecodePush',
-      ja: 'RecodePushでスケーラブルなアプリケーションを構築する',
-      zh: '使用RecodePush构建可扩展的应用程序'
+      en: "Building Scalable Applications with RecodePush",
+      vi: "Xây Dựng Ứng Dụng Có Khả Năng Mở Rộng với RecodePush",
+      ja: "RecodePushでスケーラブルなアプリケーションを構築する",
+      zh: "使用RecodePush构建可扩展的应用程序",
     },
     excerpt: {
-      en: 'Learn the best practices for scaling your applications using our platform.',
-      vi: 'Tìm hiểu các phương pháp tốt nhất để mở rộng ứng dụng của bạn bằng nền tảng của chúng tôi.',
-      ja: '当社のプラットフォームを使用してアプリケーションをスケーリングするためのベストプラクティスを学びます。',
-      zh: '了解使用我们的平台扩展应用程序的最佳实践。'
+      en: "Learn the best practices for scaling your applications using our platform.",
+      vi: "Tìm hiểu các phương pháp tốt nhất để mở rộng ứng dụng của bạn bằng nền tảng của chúng tôi.",
+      ja: "当社のプラットフォームを使用してアプリケーションをスケーリングするためのベストプラクティスを学びます。",
+      zh: "了解使用我们的平台扩展应用程序的最佳实践。",
     },
     content: {
       en: `
@@ -235,19 +238,20 @@ const mockBlogPosts = [
         <p>在可扩展应用程序中，数据库通常成为瓶颈。考虑诸如读取副本（用于读取密集型工作负载）、分片（用于在多个数据库之间分配数据）以及为特定类型的数据使用专门数据库等策略。</p>
         
         <p>我们的平台支持各种数据库技术和扩展模式，确保您的数据层能够跟上应用程序的增长。</p>
-      `
+      `,
     },
-    publishedDate: '2023-08-28',
-    author: 'Jamie Chen',
+    publishedDate: "2023-08-28",
+    author: "Jamie Chen",
     readTime: {
-      en: '7 min read',
-      vi: '7 phút đọc',
-      ja: '7分で読める',
-      zh: '7分钟阅读'
+      en: "7 min read",
+      vi: "7 phút đọc",
+      ja: "7分で読める",
+      zh: "7分钟阅读",
     },
-    category: 'Development',
-    thumbnail: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80'
-  }
+    category: "Development",
+    thumbnail:
+      "https://images.unsplash.com/photo-1498050108023-c5249f4df085?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80",
+  },
 ];
 
 interface MultilingualContent {
@@ -268,26 +272,16 @@ interface MultilingualBlogPost {
 
 const BlogPost = () => {
   const { id } = useParams<{ id: string }>();
-  const [post, setPost] = useState<MultilingualBlogPost | null>(null);
-  const [loading, setLoading] = useState(true);
   const { t, i18n } = useTranslation();
-  const currentLanguage = i18n.language || 'en';
-  
-  useEffect(() => {
-    // In a real app, this would be an API call
-    const fetchPost = () => {
-      setLoading(true);
-      setTimeout(() => {
-        const foundPost = mockBlogPosts.find(post => post.id === Number(id));
-        setPost(foundPost as MultilingualBlogPost || null);
-        setLoading(false);
-      }, 500); // Simulate API delay
-    };
-    
-    fetchPost();
-  }, [id]);
+  const localUser = localStorage.getItem(LOCAL_STORAGE_KEYS.PROFILE);
 
-  if (loading) {
+  const { data, isLoading } = useQueryBlogDetail(id);
+
+  const post = useMemo(() => {
+    return data?.data;
+  }, [data]);
+
+  if (isLoading) {
     return (
       <div className="min-h-screen bg-neutral-50">
         <Navbar />
@@ -308,12 +302,12 @@ const BlogPost = () => {
       <div className="min-h-screen bg-neutral-50">
         <Navbar />
         <div className="container mx-auto pt-32 pb-20 px-4 text-center">
-          <h1 className="text-3xl font-bold mb-4">{t('blog.blogNotFound')}</h1>
-          <p className="mb-8">{t('blog.blogDoesntExist')}</p>
+          <h1 className="text-3xl font-bold mb-4">{t("blog.blogNotFound")}</h1>
+          <p className="mb-8">{t("blog.blogDoesntExist")}</p>
           <Link to="/blog">
             <Button>
               <ArrowLeft size={16} className="mr-2" />
-              {t('blog.backToBlog')}
+              {t("blog.backToBlog")}
             </Button>
           </Link>
         </div>
@@ -325,80 +319,92 @@ const BlogPost = () => {
   return (
     <div className="min-h-screen bg-neutral-50">
       <Navbar />
-      
+
       <main className="pt-32 pb-20">
         <article className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto">
             {/* Header */}
             <div className="mb-8">
-              <Link to="/blog" className="inline-flex items-center text-brand-600 hover:text-brand-700 mb-6 transition-colors">
+              <Link
+                to="/blog"
+                className="inline-flex items-center text-brand-600 hover:text-brand-700 mb-6 transition-colors"
+              >
                 <ArrowLeft size={16} className="mr-2" />
-                {t('blog.backToBlog')}
+                {t("blog.backToBlog")}
               </Link>
-              
+
               <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6">
-                {post.title[currentLanguage] || post.title.en}
+                {post.title}
               </h1>
-              
+
               <div className="flex flex-wrap items-center text-neutral-600 gap-4 mb-6">
                 <div className="flex items-center">
                   <div className="w-8 h-8 bg-neutral-200 rounded-full flex items-center justify-center mr-2">
-                    <span className="text-sm font-medium">{post.author.charAt(0)}</span>
+                    <span className="text-sm font-medium">
+                      {post.author.charAt(0)}
+                    </span>
                   </div>
                   <span className="font-medium">{post.author}</span>
                 </div>
-                
+
                 <div className="flex items-center">
                   <Calendar size={16} className="mr-1" />
-                  <span>{post.publishedDate}</span>
+                  <span>{post.createdAt}</span>
                 </div>
-                
+
                 <div className="flex items-center">
                   <Clock size={16} className="mr-1" />
-                  <span>{post.readTime[currentLanguage] || post.readTime.en}</span>
+                  <span>
+                    {/* {post.readTime[currentLanguage] || post.readTime.en} */}
+                    {calculateReadingTime(post.content)} minutes read
+                  </span>
                 </div>
-                
+
                 <span className="px-2 py-1 bg-brand-50 text-brand-700 rounded-full text-xs font-medium">
                   {post.category}
                 </span>
               </div>
             </div>
-            
+
             {/* Featured Image */}
             <div className="rounded-xl overflow-hidden mb-10 shadow-lg">
-              <img 
-                src={post.thumbnail} 
-                alt={post.title[currentLanguage] || post.title.en} 
+              <img
+                src={post.thumbnail}
+                alt={post.title}
                 className="w-full h-auto object-cover"
               />
             </div>
-            
+
             {/* Content */}
-            <div 
+            <div
               className="prose prose-lg max-w-none mb-12"
-              dangerouslySetInnerHTML={{ __html: post.content?.[currentLanguage] || post.content?.en || '' }}
+              dangerouslySetInnerHTML={{
+                __html: post.content || "",
+              }}
             />
-            
+
             {/* Actions */}
             <div className="flex justify-between items-center border-t border-neutral-200 pt-8">
               <Link to="/blog">
                 <Button variant="outline">
                   <ArrowLeft size={16} className="mr-2" />
-                  {t('blogPost.backToAllArticles')}
+                  {t("blogPost.backToAllArticles")}
                 </Button>
               </Link>
-              
-              <Link to={`/blog/edit/${post.id}`}>
-                <Button className="bg-brand-600 hover:bg-brand-700 text-white">
-                  <Edit size={16} className="mr-2" />
-                  {t('blogPost.editArticle')}
-                </Button>
-              </Link>
+
+              {!!localUser && (
+                <Link to={`/blog/edit/${post.id}`}>
+                  <Button className="bg-brand-600 hover:bg-brand-700 text-white">
+                    <Edit size={16} className="mr-2" />
+                    {t("blogPost.editArticle")}
+                  </Button>
+                </Link>
+              )}
             </div>
           </div>
         </article>
       </main>
-      
+
       <Footer />
     </div>
   );

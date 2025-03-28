@@ -14,7 +14,6 @@ export const supportedLanguages = {
   en: 'English',
   vi: 'Vietnamese',
   ja: 'Japanese',
-  zh: 'Chinese',
 };
 
 // Setup i18next

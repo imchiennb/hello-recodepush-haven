@@ -7,6 +7,7 @@
     "features": "機能",
     "contact": "お問い合わせ",
     "login": "ログイン",
+    "logout": "登录",
     "signup": "登録",
     "manageBlog": "ブログ管理",
     "logout": "ログアウト"
@@ -47,7 +48,9 @@
     "deleteConfirmation": "本当によろしいですか？",
     "deleteWarning": "この操作は元に戻せません。ブログ記事は完全に削除されます。",
     "cancel": "キャンセル",
-    "backToBlog": "ブログに戻る"
+    "backToBlog": "ブログに戻る",
+    "excerpt": "要約",
+    "thumbnail": "サムネイル"
   },
   "blogEditor": {
     "editBlogPost": "ブログ記事の編集",
@@ -74,7 +77,13 @@
     "contentRequired": "コンテンツは必須です",
     "titleRequired": "タイトルは必須です",
     "publishedSuccess": "ブログ記事が正常に公開されました",
-    "savedAsDraft": "ブログ記事が下書きとして正常に保存されました"
+    "savedAsDraft": "ブログ記事が下書きとして正常に保存されました",
+    "updateBlogSuccess": "ブログ記事が正常に更新されました",
+    "updateBlogError": "ブログ記事の更新に失敗しました",
+    "createBlogSuccess": "ブログ記事が正常に作成されました",
+    "createBlogError": "ブログ記事の作成に失敗しました",
+    "deleteBlogSuccess": "ブログ記事が正常に削除されました",
+    "deleteBlogError": "ブログ記事の削除に失敗しました"
   },
   "blogPost": {
     "editArticle": "記事を編集",

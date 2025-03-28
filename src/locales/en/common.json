@@ -7,6 +7,7 @@
     "features": "Features",
     "contact": "Contact",
     "login": "Login",
+    "logout": "Logout",
     "signup": "Sign Up",
     "manageBlog": "Manage Blog",
     "logout": "Logout"
@@ -47,7 +48,9 @@
     "deleteConfirmation": "Are you sure?",
     "deleteWarning": "This action cannot be undone. This will permanently delete the blog post.",
     "cancel": "Cancel",
-    "backToBlog": "Back to Blog"
+    "backToBlog": "Back to Blog",
+    "excerpt": "Summary",
+    "thumbnail": "Thumbnail"
   },
   "blogEditor": {
     "editBlogPost": "Edit Blog Post",
@@ -74,7 +77,13 @@
     "contentRequired": "Content is required",
     "titleRequired": "Title is required",
     "publishedSuccess": "Blog post published successfully",
-    "savedAsDraft": "Blog post saved as draft successfully"
+    "savedAsDraft": "Blog post saved as draft successfully",
+    "updateBlogSuccess": "Blog post updated successfully",
+    "updateBlogError": "Failed to update blog post",
+    "createBlogSuccess": "Blog post created successfully",
+    "createBlogError": "Failed to create blog post",
+    "deleteBlogSuccess": "Blog post deleted successfully",
+    "deleteBlogError": "Failed to delete blog post"
   },
   "blogPost": {
     "editArticle": "Edit Article",
