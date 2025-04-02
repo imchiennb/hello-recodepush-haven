@@ -341,7 +341,6 @@ const BlogEditor = () => {
                                           await mutationUploadFile.mutateAsync({
                                             file,
                                           });
-                                        console.log("xxx2::data", data);
                                         const fileURI = `${
                                           import.meta.env.VITE_STORAGE_URL
                                         }/images/${data.data.filename}`;

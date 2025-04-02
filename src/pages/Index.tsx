@@ -16,11 +16,11 @@ const Index = () => {
   useEffect(() => {
     const handleAnchorClick = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
-      if (target.tagName === 'A' && target.getAttribute('href')?.startsWith('#')) {
+      if (target.tagName === 'A' && (target.getAttribute('href')?.startsWith('#') || target.getAttribute('href')?.startsWith('/#'))) {
         e.preventDefault();
         const href = target.getAttribute('href');
         if (href) {
-          const element = document.querySelector(href);
+          const element = document.querySelector('section[id=' + href.slice(2) + ']');
           if (element) {
             window.scrollTo({
               top: element.getBoundingClientRect().top + window.scrollY - 80,

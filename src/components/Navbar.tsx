@@ -94,19 +94,19 @@ const Navbar = () => {
               {t("nav.blog")}
             </Link>
             <Link
-              to="#features"
+              to="/#features"
               className="text-neutral-700 hover:text-brand-600 transition-colors"
             >
               {t("nav.features")}
             </Link>
             <Link
-              to="#pricing"
+              to="/#pricing"
               className="text-neutral-700 hover:text-brand-600 transition-colors"
             >
               {t("nav.pricing")}
             </Link>
             <Link
-              to="#contact"
+              to="/#contact"
               className="text-neutral-700 hover:text-brand-600 transition-colors"
             >
               {t("nav.contact")}
