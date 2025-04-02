@@ -5,19 +5,19 @@ const testimonials = [
   {
     quote: "RecodePush transformed our development process. Our team is now shipping features twice as fast with fewer bugs.",
     name: "Sarah Johnson",
-    title: "CTO at TechFront",
+    title: "Mobile Lead Developer",
     avatar: "https://randomuser.me/api/portraits/women/45.jpg"
   },
   {
     quote: "The automated code reviews have been a game-changer for our junior developers. The quality of our codebase has improved dramatically.",
     name: "Michael Chen",
-    title: "Lead Developer at Stackflow",
+    title: "Lead Developer",
     avatar: "https://randomuser.me/api/portraits/men/22.jpg"
   },
   {
     quote: "We switched from three different tools to just RecodePush. Our workflow is so much simpler now, and we're saving thousands per month.",
     name: "Emily Rodriguez",
-    title: "Engineering Manager at DataSync",
+    title: "Engineering Manager",
     avatar: "https://randomuser.me/api/portraits/women/32.jpg"
   }
 ];

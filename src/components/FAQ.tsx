@@ -13,10 +13,10 @@ const FAQ = () => {
   const { t } = useTranslation();
 
   const faqs: FAQItem[] = [
-    {
-      question: t("How does the 14-day free trial work?"),
-      answer: t("Our free trial gives you full access to all features of your chosen plan for 14 days. No credit card is required to start. At the end of your trial, you can choose to subscribe or your account will automatically downgrade to our limited free tier."),
-    },
+    // {
+    //   question: t("How does the 14-day free trial work?"),
+    //   answer: t("Our free trial gives you full access to all features of your chosen plan for 14 days. No credit card is required to start. At the end of your trial, you can choose to subscribe or your account will automatically downgrade to our limited free tier."),
+    // },
     {
       question: t("Can I switch plans later?"),
       answer: t("Yes, you can upgrade, downgrade, or change your plan at any time. If you upgrade, the new pricing takes effect immediately. If you downgrade, the new pricing takes effect at the start of your next billing cycle."),
