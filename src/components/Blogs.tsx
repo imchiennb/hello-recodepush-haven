@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useQueryBlogs } from "@/hooks/blog/use-query-blogs";
 import { calculateReadingTime } from "@/lib/utils";
+import PlateContentRenderer from "./PlateContent";
 
 interface MultilingualContent {
   [key: string]: string;
@@ -99,7 +100,7 @@ const Blogs = () => {
                     {t("blog.readArticle")}
                     <ArrowRight
                       size={16}
-                      className="ml-2 group-hover:translate-x-1 transition-transform"
+                      className="ml-2 transition-transform group-hover:translate-x-1"
                     />
                   </Button>
                 </Link>

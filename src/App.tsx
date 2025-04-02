@@ -16,6 +16,7 @@ import { useEffect } from "react";
 import i18n, { supportedLanguages } from "./i18n";
 import { useQueryProfile } from "./hooks/auth/use-query-profile";
 import { LOCAL_STORAGE_KEYS } from "./constant/query-keys";
+import NotionTextEditor from "./pages/NotionTextEditor";
 // Protected route component
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const isAuthenticated =
@@ -61,8 +62,8 @@ const App = () => (
           toastOptions={{
             style: {
               padding: "18px",
-              background: 'white',
-              color: '#000'
+              background: "white",
+              color: "#000",
             },
           }}
         />
@@ -128,7 +129,6 @@ const App = () => (
                   </ProtectedRoute>
                 }
               />
-
               {/* Catch-all route */}
               <Route path="*" element={<NotFound />} />
             </Routes>

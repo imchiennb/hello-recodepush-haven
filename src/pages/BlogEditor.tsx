@@ -35,6 +35,7 @@ import { useMutationUploadFile } from "@/hooks/upload/use-mutation-upload";
 import { useQueryBlogDetail } from "@/hooks/blog/use-query-blog-detail";
 import { LOCAL_STORAGE_KEYS } from "@/constant/query-keys";
 import { useMutationUpdateBlog } from "@/hooks/blog/use-mutation-update-blog";
+import NotionTextEditor from "./NotionTextEditor";
 // Extended BlogPost interface with multilingual support
 interface MultilingualContent {
   [key: string]: string;
@@ -78,24 +79,26 @@ const BlogEditor = () => {
       title: post?.title,
       summary: post?.summary,
       thumbnail: post?.thumbnail,
-      content: post?.content,
+      content: post?.content ? JSON.parse(post?.content) : undefined,
       language: post?.language,
       category: post?.category,
       publish: post?.publish,
       author: post?.author,
     },
   });
-
+  
   const handleSave = async (status: "Draft" | "Published") => {
     const data = form.getValues();
     if (isEditing) {
       mutationUpdateBlog.mutate({
         ...data,
+        content: JSON.stringify(data.content),
         id,
       });
     } else {
       mutationCreateBlog.mutate({
         ...data,
+        content: JSON.stringify(data.content),
       });
     }
   };
@@ -121,7 +124,7 @@ const BlogEditor = () => {
 
       <main className="pt-32 pb-20">
         <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto">
+          <div className="max-w-[62rem] mx-auto">
             <div className="flex justify-between items-center mb-8">
               <div>
                 <Link
@@ -379,17 +382,18 @@ const BlogEditor = () => {
 
                   {/* Content with WYSIWYG editor */}
                   <FormField
+                    key={`${post?.id} ${Date.now()}`}
                     name="content"
                     render={({ field }) => {
                       return (
                         <FormItem>
-                          <FormLabel htmlFor="content">
+                          {/* <FormLabel htmlFor="content">
                             {t("blogEditor.content")}
-                          </FormLabel>
+                          </FormLabel> */}
                           <FormControl>
-                            <RichTextEditor
+                            <NotionTextEditor
+                              setValue={field.onChange}
                               value={field.value}
-                              onChange={field.onChange}
                             />
                           </FormControl>
                         </FormItem>
