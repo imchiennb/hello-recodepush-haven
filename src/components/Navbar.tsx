@@ -140,12 +140,12 @@ const Navbar = () => {
               </div>
             ) : (
               <>
-                <Button variant="ghost" size="sm" onClick={handleLoginClick}>
+                {/* <Button variant="ghost" size="sm" onClick={handleLoginClick}>
                   {t("nav.login")}
                 </Button>
                 <Button size="sm" onClick={handleSignupClick} disabled>
                   {t("nav.signup")}
-                </Button>
+                </Button> */}
               </>
             )}
           </div>

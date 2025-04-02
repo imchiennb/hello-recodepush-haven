@@ -1,6 +1,7 @@
 import { QUERY_KEYS } from "@/constant/query-keys";
 import { useQueryClient } from "@tanstack/react-query";
 import React, { createContext, useContext, useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 
 type User = {
   id: string;
@@ -29,6 +30,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [authModalTab, setAuthModalTab] = useState<"login" | "signup">("login");
   const queryClient = useQueryClient();
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    if (pathname === "/login") {
+      setIsAuthModalOpen(true);
+      setAuthModalTab("login");
+    }
+  }, [pathname]);
 
   useEffect(() => {
     // Check if user is stored in localStorage

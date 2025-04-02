@@ -55,21 +55,21 @@ const LanguageRoute = ({ children }: { children: React.ReactNode }) => {
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <AuthProvider>
-      <TooltipProvider>
-        <Toaster />
-        <Sonner
-          toastOptions={{
-            style: {
-              padding: "18px",
-              background: "white",
-              color: "#000",
-            },
-          }}
-        />
+    <BrowserRouter>
+      <AuthProvider>
+        <TooltipProvider>
+          <Toaster />
+          <Sonner
+            toastOptions={{
+              style: {
+                padding: "18px",
+                background: "white",
+                color: "#000",
+              },
+            }}
+          />
 
-        <AuthModal />
-        <BrowserRouter>
+          <AuthModal />
           <LanguageRoute>
             <Routes>
               {/* Language-specific routes */}
@@ -133,9 +133,9 @@ const App = () => (
               <Route path="*" element={<NotFound />} />
             </Routes>
           </LanguageRoute>
-        </BrowserRouter>
-      </TooltipProvider>
-    </AuthProvider>
+        </TooltipProvider>
+      </AuthProvider>
+    </BrowserRouter>
   </QueryClientProvider>
 );
 
