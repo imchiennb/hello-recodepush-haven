@@ -3,7 +3,10 @@ import { CondOperator, RequestQueryBuilder } from "@dataui/crud-request";
 import { ESortDirection, TCommonSearchParams } from "../types";
 
 export class RequestQueryParams {
-  static pagination<T>(filter: TCommonSearchParams & T, searchKey: string) {
+  static pagination<T extends { language?: string }>(
+    filter: TCommonSearchParams & T,
+    searchKey: string
+  ) {
     const queryBuilder = RequestQueryBuilder.create({
       page: filter?.page || 1,
       limit: filter?.limit || 10,
@@ -28,6 +31,14 @@ export class RequestQueryParams {
       field: "deletedAt",
       operator: CondOperator.IS_NULL,
     });
+
+    if (filter.language) {
+      queryBuilder.setFilter({
+        field: "language",
+        operator: CondOperator.EQUALS,
+        value: filter.language,
+      });
+    }
     return queryBuilder.query(true);
   }
   static list() {

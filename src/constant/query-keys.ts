@@ -1,6 +1,7 @@
 export const QUERY_KEYS = {
   BLOGS: 'blogs',
   PROFILE: 'profile',
+  LANGUAGE: 'language',
 };
 
 export const LOCAL_STORAGE_KEYS = {

@@ -174,7 +174,7 @@ const BlogManage = () => {
 
   const mutationDeleteBlog = useMutationDeleteBlog();
 
-  const { data: blogs } = useQueryBlogs({ page: 1, limit: 1000 });
+  const { data: blogs } = useQueryBlogs({ page: 1, limit: 1000, language: "all" });
 
   const handleDeletePost = () => {
     if (postToDelete) {

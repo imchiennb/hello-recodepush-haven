@@ -134,7 +134,7 @@ const pricingPlans = {
     },
     {
       name: "Starter",
-      price: "$12",
+      price: "$9",
       description: "Perfect for small teams and individual developers",
       // features: [
       //   "Up to 5 team members",
@@ -154,7 +154,7 @@ const pricingPlans = {
     },
     {
       name: "Standard",
-      price: "$50",
+      price: "$40",
       description: "Perfect for small teams and individual developers",
       // features: [
       //   "Up to 5 team members",
@@ -174,7 +174,7 @@ const pricingPlans = {
     },
     {
       name: "Professional",
-      price: "$80",
+      price: "$60",
       description: "Ideal for growing teams with advanced needs",
       // features: [
       //   "Up to 20 team members",
@@ -220,7 +220,7 @@ const pricingPlans = {
 };
 
 const Pricing = () => {
-  const [billingPeriod, setBillingPeriod] = useState<PricingPeriod>("monthly");
+  const [billingPeriod, setBillingPeriod] = useState<PricingPeriod>("yearly");
   const plans = pricingPlans[billingPeriod];
 
   const handleRedirectToRegister = () => {
@@ -238,8 +238,8 @@ const Pricing = () => {
             Simple, Transparent Pricing
           </h2>
           <p className="text-lg text-neutral-600 mb-8">
-            Choose the plan that best fits your needs. All plans include a
-            14-day free trial.
+            Choose the plan that best fits your needs. All plans include 
+            3 months free trial.
           </p>
 
           {/* Billing toggle */}

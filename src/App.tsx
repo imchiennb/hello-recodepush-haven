@@ -73,11 +73,11 @@ const App = () => (
           <LanguageRoute>
             <Routes>
               {/* Language-specific routes */}
-              <Route path="/:lang" element={<Index />} />
-              <Route path="/:lang/blog" element={<BlogList />} />
-              <Route path="/:lang/blog/:id" element={<BlogPost />} />
+              <Route path="/" element={<Index />} />
+              <Route path="/blog" element={<BlogList />} />
+              <Route path="/blog/:id" element={<BlogPost />} />
               <Route
-                path="/:lang/blog/manage"
+                path="/blog/manage"
                 element={
                   <ProtectedRoute>
                     <BlogManage />
@@ -85,7 +85,7 @@ const App = () => (
                 }
               />
               <Route
-                path="/:lang/blog/create"
+                path="/blog/create"
                 element={
                   <ProtectedRoute>
                     <BlogEditor />
@@ -93,7 +93,7 @@ const App = () => (
                 }
               />
               <Route
-                path="/:lang/blog/edit/:id"
+                path="/blog/edit/:id"
                 element={
                   <ProtectedRoute>
                     <BlogEditor />

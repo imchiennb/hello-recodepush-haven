@@ -64,7 +64,9 @@ const Hero = () => {
             <Button 
               variant="outline" 
               className="group px-8 py-6 text-lg h-auto border-2 hover:bg-brand-50 transition-all duration-300 hover:border-brand-300"
-              onClick={() => window.location.href = '#features'}
+              onClick={() => {
+                window.open("https://docs.recodepush.com/@recodepush-react-native", "_blank");
+              }}
             >
               <span>See How It Works</span>
               <ArrowRight className="ml-2 h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" />

@@ -5,7 +5,8 @@ import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useQueryBlogs } from "@/hooks/blog/use-query-blogs";
 import { calculateReadingTime } from "@/lib/utils";
-import PlateContentRenderer from "./PlateContent";
+import { useQueryObserver } from "@/lib/use-query-observer";
+import { QUERY_KEYS } from "@/constant/query-keys";
 
 interface MultilingualContent {
   [key: string]: string;
@@ -25,7 +26,7 @@ export type BlogPost = {
 
 const Blogs = () => {
   const { t, i18n } = useTranslation();
-
+  
   const data = useQueryBlogs({
     limit: 3,
     page: 1,
