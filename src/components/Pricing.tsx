@@ -21,7 +21,7 @@ const pricingPlans = {
       features: [
         "Up to 10 bundles",
         "Up to 1,000 updates per month",
-        "Free trial with 3 months",
+        "Free forever",
       ],
       cta: "Get Started",
       popular: false,
@@ -127,7 +127,7 @@ const pricingPlans = {
       features: [
         "Up to 10 bundles",
         "Up to 1,000 updates per month",
-        "Free trial with 3 months",
+        "Free forever",
       ],
       cta: "Get Started",
       popular: false,

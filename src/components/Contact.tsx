@@ -126,7 +126,7 @@ const Contact = () => {
                 </div>
               </div>
 
-              <div className="bg-gradient-to-r from-brand-500 to-brand-700 p-6 rounded-xl text-white">
+              {/* <div className="bg-gradient-to-r from-brand-500 to-brand-700 p-6 rounded-xl text-white">
                 <h3 className="text-xl font-semibold mb-3">
                   {t("contact.communityTitle")}
                 </h3>
@@ -141,7 +141,7 @@ const Contact = () => {
                     Discord
                   </Button>
                 </div>
-              </div>
+              </div> */}
             </div>
 
             <div className="lg:col-span-3 bg-white p-8 rounded-xl shadow-sm border border-neutral-100">

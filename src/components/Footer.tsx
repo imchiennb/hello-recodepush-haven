@@ -75,7 +75,7 @@ const Footer = () => {
 
         <div className="pt-8 border-t border-neutral-200 flex flex-col sm:flex-row justify-between items-center">
           <p className="text-neutral-500 text-sm mb-4 sm:mb-0">
-            &copy; {currentYear} RecodePush. {t('footer.allRightsReserved')}
+            &copy; {currentYear} Recodepush. {t('footer.allRightsReserved')}
           </p>
           <div className="flex items-center space-x-4">
             <a href="#" className="text-neutral-500 hover:text-brand-600 text-sm">
