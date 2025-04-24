@@ -341,7 +341,7 @@ const BlogManage = () => {
                           </TableCell>
                           <TableCell className="text-right">
                             <div className="flex justify-end gap-2">
-                              <Link to={`/blog/${post.id}`}>
+                              <Link to={`/blog/${post.slug}`}>
                                 <Button
                                   size="sm"
                                   variant="outline"
@@ -353,7 +353,7 @@ const BlogManage = () => {
                                   <Eye className="h-4 w-4" />
                                 </Button>
                               </Link>
-                              <Link to={`/blog/edit/${post.id}`}>
+                              <Link to={`/blog/edit/${post.slug}`}>
                                 <Button
                                   size="sm"
                                   variant="outline"

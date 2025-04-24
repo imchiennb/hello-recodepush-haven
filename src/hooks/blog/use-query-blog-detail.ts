@@ -7,7 +7,7 @@ export const useQueryBlogDetail = (id: string) => {
   const query = useQuery({
     queryKey: [QUERY_KEYS.BLOGS, id],
     queryFn: () => {
-      return http.get(`/blog/${id}`);
+      return http.get(`/blog/slug/${id}`);
     },
     enabled: !!id,
   });

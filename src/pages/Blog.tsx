@@ -176,7 +176,7 @@ const Blog = () => {
                     </div>
                   </div>
                   <div className="px-6 pb-6">
-                    <Link to={`/blog/${post.id}`}>
+                    <Link to={`/blog/${post.slug}`}>
                       <Button variant="ghost" className="w-full justify-center group">
                         {t('blog.readArticle')}
                         <ArrowRight size={16} className="ml-2 group-hover:translate-x-1 transition-transform" />

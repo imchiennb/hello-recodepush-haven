@@ -13,6 +13,7 @@ type TCreateBlogDTO = {
   category: string;
   publish: boolean;
   author: string;
+  slug: string;
 };
 
 export const useMutationCreateBlog = () => {

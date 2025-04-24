@@ -93,7 +93,7 @@ const Blogs = () => {
                 </div>
               </div>
               <div className="px-6 pb-6">
-                <Link to={`/blog/${post.id}`}>
+                <Link to={`/blog/${post.slug}`}>
                   <Button
                     variant="ghost"
                     className="w-full justify-center group"

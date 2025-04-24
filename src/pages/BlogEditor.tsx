@@ -36,6 +36,7 @@ import { useQueryBlogDetail } from "@/hooks/blog/use-query-blog-detail";
 import { LOCAL_STORAGE_KEYS } from "@/constant/query-keys";
 import { useMutationUpdateBlog } from "@/hooks/blog/use-mutation-update-blog";
 import NotionTextEditor from "./NotionTextEditor";
+import { createSlug } from "@/lib/utils";
 // Extended BlogPost interface with multilingual support
 interface MultilingualContent {
   [key: string]: string;
@@ -76,6 +77,7 @@ const BlogEditor = () => {
 
   const form = useForm({
     values: {
+      id: post?.id,
       title: post?.title,
       summary: post?.summary,
       thumbnail: post?.thumbnail,
@@ -84,16 +86,24 @@ const BlogEditor = () => {
       category: post?.category,
       publish: post?.publish,
       author: post?.author,
+      slug: post?.slug,
     },
   });
-  
+
+  useEffect(() => {
+    if(form.getValues().title){
+      const slug = createSlug(form.getValues().title);
+      form.setValue('slug', slug);
+    }
+  }, [form.getValues().title]);
+
   const handleSave = async (status: "Draft" | "Published") => {
     const data = form.getValues();
     if (isEditing) {
       mutationUpdateBlog.mutate({
         ...data,
         content: JSON.stringify(data.content),
-        id,
+        id: data?.id,
       });
     } else {
       mutationCreateBlog.mutate({
@@ -221,6 +231,19 @@ const BlogEditor = () => {
                               id="title"
                               placeholder={t("blogEditor.titlePlaceholder")}
                             />
+                          </FormControl>
+                        </FormItem>
+                      );
+                    }}
+                  />
+                  <FormField
+                    name="slug"
+                    render={({ field }) => {
+                      return (
+                        <FormItem>
+                          <FormLabel htmlFor="slug">Slug</FormLabel>
+                          <FormControl>
+                            <Input disabled {...field} id="slug" placeholder={"Slug"} />
                           </FormControl>
                         </FormItem>
                       );
