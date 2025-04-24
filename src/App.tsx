@@ -130,7 +130,7 @@ const App = () => (
                 }
               />
               {/* Catch-all route */}
-              <Route path="*" element={<NotFound />} />
+              <Route path="*" element={<Index />} />
             </Routes>
           </LanguageRoute>
         </TooltipProvider>
