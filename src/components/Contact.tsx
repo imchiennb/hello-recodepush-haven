@@ -89,10 +89,10 @@ const Contact = () => {
                         {t("contact.emailDescription")}
                       </p>
                       <a
-                        href="mailto:hello@recodepush.com"
+                        href="mailto:fresco.company.work@gmail.com"
                         className="mt-2 inline-block text-brand-600 hover:text-brand-700 font-medium"
                       >
-                        hello@recodepush.com
+                        fresco.company.work@gmail.com
                       </a>
                     </div>
                   </div>
